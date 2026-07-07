@@ -1,0 +1,297 @@
+/* ═══════════════════════════════════════
+   forms.css — ExpoConnect Form Styles
+   ═══════════════════════════════════════ */
+
+/* ── FORM PAGE LAYOUT ── */
+.form-page {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 110px 5% 60px;
+}
+.form-wrap {
+  width: 100%; max-width: 640px;
+}
+.form-wrap.wide { max-width: 860px; }
+
+/* ── FORM HEADER ── */
+.form-header { margin-bottom: 36px; }
+.form-header .stag  { margin-bottom: 8px; }
+.form-header .stitle { font-size: clamp(1.6rem,3.5vw,2.4rem); margin-bottom: 10px; }
+.form-header p { color: var(--muted); font-size: .9rem; line-height: 1.7; }
+.form-header .form-icon {
+  width: 60px; height: 60px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; margin-bottom: 20px;
+  background: var(--icon-bg, rgba(232,87,42,.12));
+  border: 1px solid var(--icon-border, rgba(232,87,42,.2));
+}
+
+/* ── FORM CARD ── */
+.form-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  box-shadow: var(--shadow);
+}
+.form-card.compact { padding: 32px; }
+
+/* ── STEP INDICATOR ── */
+.step-indicator {
+  display: flex; align-items: center; gap: 0;
+  margin-bottom: 36px;
+}
+.si-step {
+  display: flex; align-items: center; gap: 8px; flex: 1;
+}
+.si-dot {
+  width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .75rem; font-weight: 700;
+  border: 1px solid var(--border); background: var(--surface2); color: var(--muted);
+  transition: all .3s;
+}
+.si-step.active .si-dot  { background: var(--accent); border-color: var(--accent); color: #fff; }
+.si-step.done   .si-dot  { background: var(--green);  border-color: var(--green);  color: #fff; }
+.si-label { font-size: .78rem; color: var(--muted); font-weight: 500; white-space: nowrap; }
+.si-step.active .si-label { color: var(--text); }
+.si-line {
+  flex: 1; height: 1px; background: var(--border); margin: 0 8px; transition: background .3s;
+}
+.si-line.done { background: var(--green); }
+
+/* ── STEP PANELS ── */
+.step-panel { display: none; }
+.step-panel.active { display: block; }
+
+/* ── FIELD GROUP ── */
+.fg { margin-bottom: 20px; }
+.fg label {
+  display: block; font-size: .78rem; font-weight: 700;
+  letter-spacing: .4px; color: var(--muted);
+  margin-bottom: 7px;
+}
+.fg label .req { color: var(--accent); margin-left: 2px; }
+
+/* ── INPUTS ── */
+.fg input,
+.fg select,
+.fg textarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 12px 15px;
+  color: var(--text);
+  font-size: .9rem;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  appearance: none; -webkit-appearance: none;
+}
+.fg input:focus,
+.fg select:focus,
+.fg textarea:focus {
+  border-color: rgba(232,87,42,.55);
+  box-shadow: 0 0 0 3px rgba(232,87,42,.1);
+}
+.fg input::placeholder,
+.fg textarea::placeholder { color: var(--muted); }
+.fg select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236e6b82' d='M6 8L0 0h12z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+.fg select option { background: #1a1928; }
+.fg textarea { height: 100px; resize: vertical; }
+
+/* ── INPUT WITH ICON ── */
+.input-wrap { position: relative; }
+.input-wrap .input-icon {
+  position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+  color: var(--muted); font-size: .9rem; pointer-events: none;
+}
+.input-wrap input { padding-left: 38px; }
+
+/* ── INPUT ADDON ── */
+.input-addon {
+  display: flex; align-items: stretch;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 9px;
+  overflow: hidden; transition: border-color .2s, box-shadow .2s;
+}
+.input-addon:focus-within {
+  border-color: rgba(232,87,42,.55);
+  box-shadow: 0 0 0 3px rgba(232,87,42,.1);
+}
+.input-addon span {
+  padding: 0 14px; background: rgba(255,255,255,.04);
+  border-right: 1px solid var(--border);
+  display: flex; align-items: center;
+  font-size: .82rem; color: var(--muted); white-space: nowrap;
+}
+.input-addon input {
+  border: none; border-radius: 0; box-shadow: none;
+  background: transparent;
+}
+.input-addon input:focus { box-shadow: none; border: none; }
+
+/* ── GRID ROWS ── */
+.frow   { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.frow-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+/* ── CHECKBOX / RADIO ── */
+.fcheck { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; }
+.fcheck input[type=checkbox],
+.fcheck input[type=radio] {
+  width: 17px; height: 17px; flex-shrink: 0; margin-top: 2px;
+  accent-color: var(--accent);
+}
+.fcheck label { font-size: .85rem; color: var(--muted); cursor: pointer; line-height: 1.5; }
+.fcheck label a { color: var(--accent); }
+
+/* ── FILE UPLOAD ── */
+.file-drop {
+  border: 2px dashed var(--border);
+  border-radius: 10px; padding: 28px 20px;
+  text-align: center; cursor: pointer;
+  transition: border-color .2s, background .2s;
+}
+.file-drop:hover { border-color: rgba(232,87,42,.4); background: rgba(232,87,42,.03); }
+.file-drop.dragging { border-color: var(--accent); background: rgba(232,87,42,.06); }
+.file-drop .fd-icon { font-size: 2rem; margin-bottom: 10px; }
+.file-drop p { font-size: .84rem; color: var(--muted); }
+.file-drop p span { color: var(--accent); font-weight: 600; }
+.file-drop small { font-size: .74rem; color: var(--muted); }
+.file-drop input[type=file] { display: none; }
+
+/* ── PRODUCT TAGS INPUT ── */
+.tags-input {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 9px; padding: 8px 12px;
+  display: flex; flex-wrap: wrap; gap: 6px;
+  min-height: 48px; cursor: text;
+  transition: border-color .2s;
+}
+.tags-input:focus-within { border-color: rgba(232,87,42,.55); }
+.tags-input .titem {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(232,87,42,.15); border: 1px solid rgba(232,87,42,.3);
+  color: var(--text); border-radius: 6px;
+  padding: 3px 9px; font-size: .8rem;
+}
+.tags-input .titem button {
+  background: none; border: none; color: var(--muted);
+  font-size: .9rem; line-height: 1; padding: 0; transition: color .2s;
+}
+.tags-input .titem button:hover { color: var(--red); }
+.tags-input input {
+  border: none; background: transparent; outline: none;
+  color: var(--text); font-size: .88rem; min-width: 120px; flex: 1;
+}
+
+/* ── HINT / HELPER TEXT ── */
+.fg-hint { font-size: .75rem; color: var(--muted); margin-top: 5px; }
+.fg-error { font-size: .75rem; color: var(--red); margin-top: 5px; display: none; }
+.fg.has-error input,
+.fg.has-error select,
+.fg.has-error textarea { border-color: rgba(255,77,109,.5); }
+.fg.has-error .fg-error { display: block; }
+
+/* ── SECTION DIVIDER ── */
+.form-divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 28px 0;
+}
+.form-divider span {
+  font-size: .78rem; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--muted); white-space: nowrap;
+}
+.form-divider::before, .form-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+
+/* ── SUBMIT BUTTON ── */
+.form-submit {
+  width: 100%; padding: 14px; border-radius: 9px;
+  background: var(--accent); border: none; color: #fff;
+  font-family: var(--font-head); font-weight: 700; font-size: 1rem;
+  cursor: pointer; transition: opacity .2s, transform .2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-top: 8px;
+}
+.form-submit:hover { opacity: .88; transform: translateY(-1px); }
+.form-submit:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+.form-submit .spinner {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.3);
+  border-top-color: #fff;
+  animation: spin .7s linear infinite; display: none;
+}
+.form-submit.loading .spinner  { display: block; }
+.form-submit.loading .btn-text { opacity: .6; }
+@keyframes spin { to{ transform: rotate(360deg) } }
+
+/* ── STEP NAVIGATION ── */
+.step-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 28px;
+}
+.step-nav .btn-back {
+  background: none; border: 1px solid var(--border);
+  color: var(--muted); padding: 10px 22px; border-radius: 8px;
+  font-size: .86rem; font-weight: 600; transition: all .2s;
+}
+.step-nav .btn-back:hover { border-color: var(--border-h); color: var(--text); }
+.step-nav .btn-next {
+  background: var(--accent); color: #fff;
+  border: none; padding: 10px 26px; border-radius: 8px;
+  font-family: var(--font-head); font-weight: 700; font-size: .88rem;
+  transition: opacity .2s;
+}
+.step-nav .btn-next:hover { opacity: .85; }
+
+/* ── SUCCESS STATE ── */
+.form-success {
+  display: none; text-align: center; padding: 24px 0;
+}
+.form-success .fs-icon { font-size: 3.5rem; margin-bottom: 16px; }
+.form-success h3 { font-family: var(--font-head); font-size: 1.4rem; font-weight: 700; margin-bottom: 10px; }
+.form-success p  { color: var(--muted); font-size: .9rem; line-height: 1.7; margin-bottom: 24px; }
+.form-success .ref-id {
+  display: inline-block; background: rgba(0,201,122,.1); border: 1px solid rgba(0,201,122,.25);
+  border-radius: 8px; padding: 10px 20px;
+  font-family: var(--font-head); font-size: .9rem; color: var(--green);
+  letter-spacing: 1px; margin-bottom: 24px;
+}
+
+/* ── LOGIN CARD ── */
+.login-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 44px 40px;
+  width: 100%; max-width: 420px;
+  box-shadow: var(--shadow);
+}
+.login-card .logo-center { text-align: center; margin-bottom: 32px; }
+
+/* ── CONTACT PAGE ── */
+.contact-grid {
+  display: grid; grid-template-columns: 1fr 1.4fr; gap: 48px;
+  align-items: start; margin-top: 0;
+}
+.contact-info { display: flex; flex-direction: column; gap: 24px; }
+.ci-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px 24px;
+  display: flex; align-items: flex-start; gap: 16px;
+}
+.ci-icon {
+  width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; background: rgba(232,87,42,.12);
+}
+.ci-card h5 { font-family: var(--font-head); font-weight: 600; font-size: .9rem; margin-bottom: 4px; }
+.ci-card p  { font-size: .82rem; color: var(--muted); line-height: 1.6; }
+.ci-card a  { color: var(--accent); }
+
+/* ── RESPONSIVE ── */
+@media(max-width: 768px) {
+  .contact-grid { grid-template-columns: 1fr; }
+  .frow, .frow-3 { grid-template-columns: 1fr; }
+  .form-card { padding: 24px; }
+  .login-card { padding: 28px 24px; }
+}
