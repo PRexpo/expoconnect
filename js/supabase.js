@@ -35,8 +35,8 @@
 */
 
 // ── CONFIG — replace with your real keys ──────────────────────
-const SUPABASE_URL      = 'https://YOUR_PROJECT.supabase.co';
-const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY_HERE';
+const SUPABASE_URL      =  'https://ialogqpmndmrehhcmtlc.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_4BC12rpvLQFEJrheK50iyQ_Ud-GyCLA';
 // ──────────────────────────────────────────────────────────────
 
 // Lazy-init: only run if Supabase SDK is loaded
