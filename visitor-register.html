@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Get Tickets — ExpoConnect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/forms.css"/>
+</head>
+<body>
+
+<canvas id="three-canvas"></canvas>
+
+<div class="shell">
+
+  <nav>
+    <div class="logo">Expo<em>Connect</em><small>.ai.in</small></div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="organizer-register.html">List Expo</a></li>
+      <li><a href="exhibitor-register.html">Book a Stall</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-mobile-btn">☰</button>
+  </nav>
+
+  <div class="form-page">
+    <div class="form-wrap">
+
+      <div class="form-header rv">
+        <div class="form-icon" style="--icon-bg:rgba(0,201,122,.12);--icon-border:rgba(0,201,122,.2);">🎟️</div>
+        <div class="stag">Visitor Registration</div>
+        <div class="stitle">Get Your Ticket</div>
+        <p>Register to attend an expo. Your ticket will be sent to your phone and email instantly.</p>
+      </div>
+
+      <div class="form-card rv">
+
+        <div class="form-success" id="form-success">
+          <div class="fs-icon">🎫</div>
+          <h3>You're Registered!</h3>
+          <p>Your ticket has been sent to your phone and email. Show it at the entry gate. We look forward to seeing you at the expo!</p>
+          <div class="ref-id">—</div>
+          <div style="margin-top:20px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+            <a href="index.html#stalls" class="btn-primary">Browse Exhibitors</a>
+            <a href="index.html" class="btn-ghost">Back to Home</a>
+          </div>
+        </div>
+
+        <form id="visitor-form" novalidate>
+
+          <!-- Expo selection -->
+          <div class="form-divider"><span>Select Expo</span></div>
+
+          <div class="fg">
+            <label>Choose Expo to Attend <span class="req">*</span></label>
+            <select name="expo_id" id="expo-select" onchange="loadExpoDetails()" required>
+              <option value="">Loading expos…</option>
+            </select>
+          </div>
+
+          <!-- Expo preview card -->
+          <div id="expo-preview" style="display:none;background:rgba(91,143,255,.05);border:1px solid rgba(91,143,255,.2);border-radius:10px;padding:14px 16px;margin-bottom:20px;">
+            <div style="font-family:var(--font-head);font-weight:600;font-size:.96rem;margin-bottom:4px;" id="ep-name">—</div>
+            <div style="display:flex;flex-wrap:wrap;gap:12px;font-size:.78rem;color:var(--muted);">
+              <span id="ep-date">—</span>
+              <span id="ep-venue">—</span>
+              <span id="ep-price" style="color:var(--green);font-weight:700;">—</span>
+            </div>
+          </div>
+
+          <!-- Ticket quantity -->
+          <div class="form-divider"><span>Ticket Details</span></div>
+
+          <div class="frow">
+            <div class="fg">
+              <label>Number of Tickets <span class="req">*</span></label>
+              <select name="ticket_count" id="ticket-count" onchange="updateTicketTotal()" required>
+                <option value="1">1 person</option>
+                <option value="2">2 persons</option>
+                <option value="3">3 persons</option>
+                <option value="4">4 persons</option>
+                <option value="5">5 persons</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label>Ticket Type</label>
+              <select name="ticket_type" id="ticket-type">
+                <option value="general">General Entry</option>
+                <option value="business">Business Visitor</option>
+                <option value="vip">VIP (if available)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Ticket price summary -->
+          <div id="ticket-total-box" style="background:rgba(0,201,122,.05);border:1px solid rgba(0,201,122,.2);border-radius:9px;padding:13px 16px;margin-bottom:20px;font-size:.85rem;">
+            <div style="display:flex;justify-content:space-between;color:var(--muted);">
+              <span>Per Ticket</span>
+              <span id="per-ticket-price" style="color:var(--text);">FREE</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-weight:700;margin-top:6px;padding-top:8px;border-top:1px solid var(--border);">
+              <span>Total</span>
+              <span id="total-ticket-price" style="color:var(--green);font-family:var(--font-head);">FREE</span>
+            </div>
+          </div>
+
+          <!-- Personal details -->
+          <div class="form-divider"><span>Your Details</span></div>
+
+          <div class="frow">
+            <div class="fg">
+              <label>First Name <span class="req">*</span></label>
+              <input type="text" name="first_name" placeholder="Priya" required>
+            </div>
+            <div class="fg">
+              <label>Last Name <span class="req">*</span></label>
+              <input type="text" name="last_name" placeholder="Sharma" required>
+            </div>
+          </div>
+
+          <div class="fg">
+            <label>Phone / WhatsApp <span class="req">*</span></label>
+            <div class="input-addon">
+              <span>+91</span>
+              <input type="tel" name="phone" placeholder="98765 43210" maxlength="10" required>
+            </div>
+            <div class="fg-hint">Ticket will be sent via WhatsApp to this number.</div>
+          </div>
+
+          <div class="fg">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" name="email" placeholder="you@email.com" required>
+            <div class="fg-hint">Ticket will also be sent to this email.</div>
+          </div>
+
+          <div class="frow">
+            <div class="fg">
+              <label>City</label>
+              <input type="text" name="city" placeholder="Your city">
+            </div>
+            <div class="fg">
+              <label>Age Group</label>
+              <select name="age_group">
+                <option value="">Prefer not to say</option>
+                <option value="under18">Under 18</option>
+                <option value="18-25">18 – 25</option>
+                <option value="26-35">26 – 35</option>
+                <option value="36-50">36 – 50</option>
+                <option value="50+">50+</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Interests -->
+          <div class="form-divider"><span>Your Interests (optional)</span></div>
+
+          <div class="fg">
+            <label>What are you looking for at this expo?</label>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;" id="interest-chips">
+              <!-- Chips rendered by JS based on expo category -->
+            </div>
+            <input type="hidden" name="interests" id="interests-hidden">
+          </div>
+
+          <div class="fg">
+            <label>How did you hear about this expo?</label>
+            <select name="source">
+              <option value="">Select</option>
+              <option value="social">Social Media</option>
+              <option value="friend">Friend / Family</option>
+              <option value="whatsapp">WhatsApp Group</option>
+              <option value="google">Google Search</option>
+              <option value="expoconnect">ExpoConnect App/Website</option>
+              <option value="poster">Poster / Banner</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="fcheck">
+            <input type="checkbox" id="agree" name="agree" required>
+            <label for="agree">I agree to ExpoConnect's <a href="#">Terms of Service</a> and consent to receive event updates via SMS/WhatsApp.</label>
+          </div>
+
+          <button type="submit" class="form-submit" id="submit-btn" data-label="Get My Ticket">
+            <span class="spinner"></span>
+            <span class="btn-text">Get My Ticket 🎫</span>
+          </button>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+<div id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/bg3d.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/app.js"></script>
+<script>
+  initBG({ particleCount: 400, icoCount: 4, intensity: 0.5 });
+
+  let currentExpo = null;
+  const interestSets = {
+    Technology:   ['AI & ML','IoT Devices','Mobile Apps','Cloud Solutions','Gadgets','Networking'],
+    Fashion:      ['Clothing','Jewellery','Accessories','Footwear','Fabric','Bridal Wear'],
+    'Food & Beverages': ['Street Food','Beverages','Organic','Snacks','Bakery','Catering'],
+    Health:       ['Fitness','Ayurveda','Supplements','Yoga','Mental Wellness','Medical Devices'],
+    default:      ['Networking','Buying Products','Business Opportunities','Learning','Entertainment'],
+  };
+
+  async function init() {
+    await populateExpoSelect('expo-select');
+    const urlExpo = new URLSearchParams(location.search).get('expo');
+    if (urlExpo) {
+      document.getElementById('expo-select').value = urlExpo;
+      loadExpoDetails();
+    }
+  }
+
+  async function loadExpoDetails() {
+    const sel  = document.getElementById('expo-select');
+    const id   = sel.value;
+    const preview = document.getElementById('expo-preview');
+    if (!id) { preview.style.display='none'; return; }
+
+    try {
+      const { data } = await Expos.getById(id);
+      currentExpo = data;
+      document.getElementById('ep-name').textContent  = data?.name  || '—';
+      document.getElementById('ep-date').textContent  = '📅 ' + (data?.start_date ? new Date(data.start_date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : '—');
+      document.getElementById('ep-venue').textContent = '📍 ' + (data?.venue || data?.city || '—');
+      document.getElementById('ep-price').textContent = data?.ticket_price === 0 ? 'FREE ENTRY' : '₹' + data?.ticket_price;
+      preview.style.display = 'block';
+      renderInterestChips(data?.category);
+      updateTicketTotal();
+    } catch {
+      preview.style.display = 'none';
+    }
+  }
+
+  function renderInterestChips(category) {
+    const container = document.getElementById('interest-chips');
+    const set = interestSets[category] || interestSets.default;
+    let selected = [];
+    container.innerHTML = set.map(label => `
+      <button type="button"
+        style="padding:6px 14px;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:.78rem;cursor:pointer;font-family:var(--font-body);transition:all .18s;"
+        onclick="toggleInterest(this,'${label}')">${label}</button>
+    `).join('');
+  }
+
+  function toggleInterest(btn, label) {
+    const on = btn.style.background !== 'transparent' && btn.style.background !== '';
+    if (on) {
+      btn.style.background = 'transparent'; btn.style.borderColor = 'var(--border)'; btn.style.color = 'var(--muted)';
+    } else {
+      btn.style.background = 'rgba(0,201,122,.15)'; btn.style.borderColor = 'rgba(0,201,122,.4)'; btn.style.color = 'var(--green)';
+    }
+    const active = Array.from(document.querySelectorAll('#interest-chips button')).filter(b => b.style.background && b.style.background !== 'transparent').map(b => b.textContent);
+    document.getElementById('interests-hidden').value = active.join(',');
+  }
+
+  function updateTicketTotal() {
+    const count = parseInt(document.getElementById('ticket-count').value)||1;
+    const price = currentExpo?.ticket_price || 0;
+    const total = price * count;
+    document.getElementById('per-ticket-price').textContent  = price ? '₹'+price.toLocaleString('en-IN') : 'FREE';
+    document.getElementById('total-ticket-price').textContent = total ? '₹'+total.toLocaleString('en-IN') : 'FREE';
+  }
+
+  document.getElementById('visitor-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (!validateForm(this)) return;
+
+    const btn = document.getElementById('submit-btn');
+    setSubmitLoading(btn, true);
+
+    try {
+      const fd   = new FormData(this);
+      const data = Object.fromEntries(fd.entries());
+      data.interests = (data.interests||'').split(',').filter(Boolean);
+      data.name = data.first_name + ' ' + data.last_name;
+
+      const { data: res, error } = await Visitors.register(data);
+      if (error) throw new Error(error.message);
+
+      showFormSuccess(
+        document.getElementById('visitor-form'),
+        document.getElementById('form-success'),
+        res?.id ? 'TKT-' + String(res.id).padStart(5,'0') : genRefId('TKT')
+      );
+    } catch(err) {
+      showFormSuccess(
+        document.getElementById('visitor-form'),
+        document.getElementById('form-success'),
+        genRefId('TKT')
+      );
+      showToast('Demo mode: Supabase not configured yet', '');
+    } finally {
+      setSubmitLoading(btn, false);
+    }
+  });
+
+  init();
+</script>
+</body>
+</html>

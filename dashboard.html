@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Admin Dashboard — ExpoConnect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/admin.css"/>
+</head>
+<body style="background:var(--bg);">
+
+<!-- NO 3D background on dashboard — keeps it fast & clean -->
+
+<div class="admin-layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo" style="font-size:1.1rem;">Expo<em style="color:var(--accent);">Connect</em><small style="font-size:.42rem;color:var(--muted);letter-spacing:1px;margin-left:2px;">.ai.in</small></div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">Overview</div>
+      <ul>
+        <li><a href="#" class="active" onclick="showSection('overview',this)"><span class="nav-icon">📊</span> Dashboard</a></li>
+      </ul>
+
+      <div class="sidebar-section">Manage</div>
+      <ul>
+        <li><a href="#" onclick="showSection('expos',this)"><span class="nav-icon">🎪</span> Expos</a></li>
+        <li><a href="#" onclick="showSection('organizers',this)"><span class="nav-icon">🏛️</span> Organizers</a></li>
+        <li><a href="#" onclick="showSection('stalls',this)"><span class="nav-icon">🏪</span> Stalls / Exhibitors</a></li>
+        <li><a href="#" onclick="showSection('visitors',this)"><span class="nav-icon">🎟️</span> Visitors</a></li>
+        <li><a href="#" onclick="showSection('contacts',this)"><span class="nav-icon">✉️</span> Contact Messages <span class="notif-dot" id="contact-dot" style="display:none;"></span></a></li>
+      </ul>
+
+      <div class="sidebar-section">Settings</div>
+      <ul>
+        <li><a href="#" onclick="showSection('settings',this)"><span class="nav-icon">⚙️</span> Site Settings</a></li>
+        <li><a href="index.html" target="_blank"><span class="nav-icon">🌐</span> View Website</a></li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="#" onclick="handleLogout()">🚪 Sign Out</a>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="admin-main">
+
+    <!-- ════════════════════════
+         OVERVIEW SECTION
+    ════════════════════════ -->
+    <div id="sec-overview" class="admin-section">
+      <div class="admin-topbar">
+        <h1>Dashboard</h1>
+        <div class="topbar-right">
+          <input class="topbar-search" type="text" placeholder="🔍 Search anything…" oninput="globalSearch(this.value)">
+          <div class="avatar" id="admin-avatar">A</div>
+        </div>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="sc-left">
+            <div class="sc-label">Total Expos</div>
+            <div class="sc-num" id="stat-expos">—</div>
+            <div class="sc-change up" id="stat-expos-sub">Loading…</div>
+          </div>
+          <div class="sc-icon" style="--icon-bg:rgba(232,87,42,.12);">🎪</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-left">
+            <div class="sc-label">Organizers</div>
+            <div class="sc-num" id="stat-organizers">—</div>
+            <div class="sc-change up" id="stat-org-sub">Loading…</div>
+          </div>
+          <div class="sc-icon" style="--icon-bg:rgba(91,143,255,.12);">🏛️</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-left">
+            <div class="sc-label">Stall Bookings</div>
+            <div class="sc-num" id="stat-stalls">—</div>
+            <div class="sc-change up" id="stat-stalls-sub">Loading…</div>
+          </div>
+          <div class="sc-icon" style="--icon-bg:rgba(240,165,0,.12);">🏪</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-left">
+            <div class="sc-label">Visitors Registered</div>
+            <div class="sc-num" id="stat-visitors">—</div>
+            <div class="sc-change up" id="stat-vis-sub">Loading…</div>
+          </div>
+          <div class="sc-icon" style="--icon-bg:rgba(0,201,122,.12);">🎟️</div>
+        </div>
+      </div>
+
+      <!-- Chart + Recent -->
+      <div class="admin-grid-2">
+        <!-- Bar chart (visual only — connect to real data via Supabase) -->
+        <div class="chart-box">
+          <div class="cb-head">
+            <h4>Registrations This Week</h4>
+            <span style="font-size:.76rem;color:var(--muted);">Organizers · Stalls · Visitors</span>
+          </div>
+          <div class="chart-bars" id="chart-bars">
+            <!-- Rendered by JS -->
+          </div>
+          <div class="chart-labels">
+            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+          </div>
+        </div>
+
+        <!-- Pending approvals -->
+        <div class="detail-panel">
+          <h4>⏳ Pending Approvals</h4>
+          <div id="pending-list">
+            <div style="color:var(--muted);font-size:.84rem;padding:16px 0;text-align:center;">Loading…</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent activity table -->
+      <div class="table-wrap">
+        <div class="table-header">
+          <h4>Recent Registrations</h4>
+          <span style="font-size:.78rem;color:var(--muted);" id="recent-updated">Loading…</span>
+        </div>
+        <table>
+          <thead><tr>
+            <th>Type</th><th>Name</th><th>Contact</th><th>Date</th><th>Status</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="recent-tbody">
+            <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px;">Loading data…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════════════════════════
+         EXPOS SECTION
+    ════════════════════════ -->
+    <div id="sec-expos" class="admin-section" style="display:none;">
+      <div class="admin-topbar">
+        <h1>Expos</h1>
+        <div class="topbar-right">
+          <button class="btn-sm" onclick="openAddExpoModal()">+ Add Expo</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-header">
+          <h4>All Expos</h4>
+          <div class="table-filters">
+            <button class="tfilter on" onclick="filterTable('expo','all',this)">All</button>
+            <button class="tfilter" onclick="filterTable('expo','live',this)">Live</button>
+            <button class="tfilter" onclick="filterTable('expo','upcoming',this)">Upcoming</button>
+            <button class="tfilter" onclick="filterTable('expo','past',this)">Past</button>
+          </div>
+        </div>
+        <table>
+          <thead><tr>
+            <th>Expo Name</th><th>City</th><th>Category</th><th>Dates</th><th>Stalls</th><th>Ticket</th><th>Status</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="expos-tbody">
+            <tr><td colspan="8" style="text-align:center;color:var(--muted);padding:40px;">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════════════════════════
+         ORGANIZERS SECTION
+    ════════════════════════ -->
+    <div id="sec-organizers" class="admin-section" style="display:none;">
+      <div class="admin-topbar">
+        <h1>Organizers</h1>
+      </div>
+      <div class="table-wrap">
+        <div class="table-header">
+          <h4>Organizer Registrations</h4>
+          <div class="table-filters">
+            <button class="tfilter on" onclick="filterTable('org','all',this)">All</button>
+            <button class="tfilter" onclick="filterTable('org','pending',this)">Pending</button>
+            <button class="tfilter" onclick="filterTable('org','approved',this)">Approved</button>
+            <button class="tfilter" onclick="filterTable('org','rejected',this)">Rejected</button>
+          </div>
+        </div>
+        <table>
+          <thead><tr>
+            <th>Name</th><th>Organisation</th><th>City / State</th><th>Phone</th><th>Email</th><th>Expo Name</th><th>Status</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="organizers-tbody">
+            <tr><td colspan="8" style="text-align:center;color:var(--muted);padding:40px;">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════════════════════════
+         STALLS SECTION
+    ════════════════════════ -->
+    <div id="sec-stalls" class="admin-section" style="display:none;">
+      <div class="admin-topbar">
+        <h1>Stalls / Exhibitors</h1>
+      </div>
+      <div class="table-wrap">
+        <div class="table-header">
+          <h4>Stall Bookings</h4>
+          <div class="table-filters">
+            <button class="tfilter on" onclick="filterTable('stall','all',this)">All</button>
+            <button class="tfilter" onclick="filterTable('stall','pending',this)">Pending</button>
+            <button class="tfilter" onclick="filterTable('stall','approved',this)">Approved</button>
+            <button class="tfilter" onclick="filterTable('stall','rejected',this)">Rejected</button>
+          </div>
+        </div>
+        <table>
+          <thead><tr>
+            <th>Business</th><th>Expo</th><th>Category</th><th>Stall Type</th><th>Contact</th><th>Phone</th><th>Status</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="stalls-tbody">
+            <tr><td colspan="8" style="text-align:center;color:var(--muted);padding:40px;">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════════════════════════
+         VISITORS SECTION
+    ════════════════════════ -->
+    <div id="sec-visitors" class="admin-section" style="display:none;">
+      <div class="admin-topbar">
+        <h1>Visitors / Attendees</h1>
+      </div>
+      <div class="table-wrap">
+        <div class="table-header">
+          <h4>Visitor Registrations</h4>
+        </div>
+        <table>
+          <thead><tr>
+            <th>Name</th><th>Expo</th><th>Phone</th><th>Email</th><th>City</th><th>Tickets</th><th>Registered On</th>
+          </tr></thead>
+          <tbody id="visitors-tbody">
+            <tr><td colspan="7" style="text-align:center;color:var(--muted);padding:40px;">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════════════════════════
+         CONTACTS SECTION
+    ════════════════════════ -->
+    <div id="sec-contacts" class="admin-section" style="display:none;">
+      <div class="admin-topbar">
+        <h1>Contact Messages</h1>
+      </div>
+      <div class="table-wrap">
+        <div class="table-header">
+          <h4>Inbound Messages</h4>
+          <div class="table-filters">
+            <button class="tfilter on" onclick="filterTable('contact','all',this)">All</button>
+            <button class="tfilter" onclick="filterTable('contact','unreplied',this)">Unreplied</button>
+            <button class="tfilter" onclick="filterTable('contact','replied',this)">Replied</button>
+          </div>
+        </div>
+        <table>
+          <thead><tr>
+            <th>Name</th><th>Role</th><th>Subject</th><th>Phone</th><th>Email</th><th>Date</th><th>Status</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="contacts-tbody">
+            <tr><td colspan="8" style="text-align:center;color:var(--muted);padding:40px;">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════════════════════════
+         SETTINGS SECTION
+    ════════════════════════ -->
+    <div id="sec-settings" class="admin-section" style="display:none;">
+      <div class="admin-topbar"><h1>Site Settings</h1></div>
+
+      <div class="admin-grid-2">
+        <div class="detail-panel">
+          <h4>🔌 Supabase Connection</h4>
+          <div class="detail-row">
+            <span class="dr-label">Project URL</span>
+            <span class="dr-val" style="font-family:monospace;font-size:.76rem;" id="sb-url">Not configured</span>
+          </div>
+          <div class="detail-row">
+            <span class="dr-label">Status</span>
+            <span class="dr-val" id="sb-status">—</span>
+          </div>
+          <div class="detail-row">
+            <span class="dr-label">Configure in</span>
+            <span class="dr-val" style="font-family:monospace;font-size:.76rem;">js/supabase.js</span>
+          </div>
+        </div>
+
+        <div class="detail-panel">
+          <h4>📋 Required Supabase Tables</h4>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+            <div style="display:flex;justify-content:space-between;font-size:.82rem;padding:7px 0;border-bottom:1px solid var(--border);">
+              <span style="font-family:monospace;color:var(--accent);">expos</span>
+              <span class="badge pending">needs create</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:.82rem;padding:7px 0;border-bottom:1px solid var(--border);">
+              <span style="font-family:monospace;color:var(--accent);">organizers</span>
+              <span class="badge pending">needs create</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:.82rem;padding:7px 0;border-bottom:1px solid var(--border);">
+              <span style="font-family:monospace;color:var(--accent);">stalls</span>
+              <span class="badge pending">needs create</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:.82rem;padding:7px 0;border-bottom:1px solid var(--border);">
+              <span style="font-family:monospace;color:var(--accent);">visitors</span>
+              <span class="badge pending">needs create</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:.82rem;padding:7px 0;">
+              <span style="font-family:monospace;color:var(--accent);">contacts</span>
+              <span class="badge pending">needs create</span>
+            </div>
+          </div>
+          <a href="https://supabase.com/dashboard" target="_blank" class="btn-outline" style="display:inline-block;margin-top:16px;font-size:.8rem;">Open Supabase Dashboard →</a>
+        </div>
+      </div>
+
+      <div class="detail-panel" style="margin-top:20px;">
+        <h4>📁 File Structure</h4>
+        <pre style="font-family:monospace;font-size:.78rem;color:var(--muted);line-height:1.9;background:var(--bg);border-radius:8px;padding:16px;overflow-x:auto;">expoconnect/
+├── index.html               ← Home page
+├── organizer-register.html  ← Organizer registration (3-step)
+├── exhibitor-register.html  ← Stall booking (3-step)
+├── visitor-register.html    ← Visitor ticket registration
+├── contact.html             ← Contact form
+├── admin-login.html         ← Admin login
+├── dashboard.html           ← This file — Admin dashboard
+├── css/
+│   ├── style.css            ← Global styles + tokens
+│   ├── forms.css            ← Form components
+│   └── admin.css            ← Dashboard styles
+└── js/
+    ├── app.js               ← Shared utilities (toast, reveal, wizard)
+    ├── bg3d.js              ← Three.js 3D background
+    └── supabase.js          ← DB layer (configure URL + key here)</pre>
+      </div>
+    </div>
+
+  </main>
+</div><!-- /admin-layout -->
+
+<!-- Add Expo Modal -->
+<div style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;" id="expo-modal">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;padding:36px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+      <h3 style="font-family:var(--font-head);font-weight:700;font-size:1.2rem;">➕ Add / Edit Expo</h3>
+      <button onclick="closeExpoModal()" style="background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;">✕</button>
+    </div>
+    <form id="expo-modal-form">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div class="fg" style="grid-column:1/-1;"><label>Expo Name</label><input type="text" name="name" placeholder="Expo name" required></div>
+        <div class="fg"><label>City</label><input type="text" name="city" placeholder="City"></div>
+        <div class="fg"><label>Category</label>
+          <select name="category">
+            <option>Technology</option><option>Fashion &amp; Lifestyle</option><option>Food &amp; Beverages</option>
+            <option>Health &amp; Wellness</option><option>Real Estate</option><option>Agriculture</option>
+            <option>Education</option><option>Automobiles</option><option>Other</option>
+          </select>
+        </div>
+        <div class="fg"><label>Start Date</label><input type="date" name="start_date"></div>
+        <div class="fg"><label>End Date</label><input type="date" name="end_date"></div>
+        <div class="fg" style="grid-column:1/-1;"><label>Venue</label><input type="text" name="venue" placeholder="Venue / Hall name, address"></div>
+        <div class="fg"><label>Status</label>
+          <select name="status">
+            <option value="upcoming">Upcoming</option>
+            <option value="live">Live</option>
+            <option value="past">Past</option>
+          </select>
+        </div>
+        <div class="fg"><label>Total Stall Slots</label><input type="number" name="total_stalls" placeholder="50"></div>
+        <div class="fg"><label>Ticket Price (₹, 0=Free)</label><input type="number" name="ticket_price" value="0" min="0"></div>
+        <div class="fg"><label>Emoji</label><input type="text" name="emoji" placeholder="🎪" maxlength="4"></div>
+        <div class="fg" style="grid-column:1/-1;"><label>Description</label><textarea name="description" placeholder="Expo description…"></textarea></div>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:20px;">
+        <button type="button" onclick="closeExpoModal()" style="padding:10px 22px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;font-family:var(--font-body);">Cancel</button>
+        <button type="submit" class="btn-sm" style="padding:10px 26px;font-size:.88rem;">Save Expo</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="js/supabase.js"></script>
+<script src="js/app.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════
+   DASHBOARD CONTROLLER
+   ═══════════════════════════════════════════════════ */
+
+// Auth guard
+Auth.requireAuth();
+
+// ── Data cache ──────────────────────────────────────
+let DATA = { expos:[], organizers:[], stalls:[], visitors:[], contacts:[] };
+let filterState = { expo:'all', org:'all', stall:'all', contact:'all' };
+
+// ── Section navigation ───────────────────────────────
+function showSection(key, linkEl) {
+  document.querySelectorAll('.admin-section').forEach(s => s.style.display='none');
+  document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+  document.getElementById('sec-'+key).style.display = 'block';
+  if (linkEl) linkEl.classList.add('active');
+  renderSection(key);
+}
+
+// ── Load all data ────────────────────────────────────
+async function loadAllData() {
+  try {
+    const [eR, oR, sR, vR, cR] = await Promise.all([
+      Expos.getAll(),
+      Organizers.getAll(),
+      Stalls.getAll(),
+      Visitors.register ? { data:[] } : dbSelect('visitors'),
+      Contacts.getAll(),
+    ]);
+    DATA.expos       = eR.data || [];
+    DATA.organizers  = oR.data || [];
+    DATA.stalls      = sR.data || [];
+    DATA.visitors    = vR.data || [];
+    DATA.contacts    = cR.data || [];
+  } catch(e) {
+    // Supabase not configured — DATA stays empty
+  }
+  renderOverview();
+  renderSection('overview');
+  checkPendingNotifications();
+}
+
+// ── Overview ─────────────────────────────────────────
+function renderOverview() {
+  document.getElementById('stat-expos').textContent      = DATA.expos.length || '0';
+  document.getElementById('stat-organizers').textContent = DATA.organizers.length || '0';
+  document.getElementById('stat-stalls').textContent     = DATA.stalls.length || '0';
+  document.getElementById('stat-visitors').textContent   = DATA.visitors.length || '0';
+
+  const liveExpos = DATA.expos.filter(e=>e.status==='live').length;
+  document.getElementById('stat-expos-sub').textContent     = liveExpos + ' live now';
+  document.getElementById('stat-org-sub').textContent       = DATA.organizers.filter(o=>o.status==='pending').length + ' pending';
+  document.getElementById('stat-stalls-sub').textContent    = DATA.stalls.filter(s=>s.status==='approved').length + ' approved';
+  document.getElementById('stat-vis-sub').textContent       = 'total registered';
+  document.getElementById('recent-updated').textContent     = 'Last updated: just now';
+
+  renderChartBars();
+  renderPendingList();
+  renderRecentTable();
+}
+
+function renderChartBars() {
+  // Placeholder chart — connect to real date-grouped data via Supabase
+  const days  = [3,7,5,9,4,12,6];
+  const maxV  = Math.max(...days);
+  const bars  = document.getElementById('chart-bars');
+  bars.innerHTML = days.map(v => `
+    <div class="chart-bar" style="height:${Math.round((v/maxV)*100)}%;" data-label="${v}"></div>
+  `).join('');
+}
+
+function renderPendingList() {
+  const pending = [
+    ...DATA.organizers.filter(o=>o.status==='pending').map(o=>({type:'Organizer', name: o.org_name||o.first_name+' '+o.last_name, id:o.id, table:'org'})),
+    ...DATA.stalls.filter(s=>s.status==='pending').map(s=>({type:'Stall', name: s.business_name, id:s.id, table:'stall'})),
+  ].slice(0, 8);
+
+  const el = document.getElementById('pending-list');
+  if (!pending.length) {
+    el.innerHTML = '<div style="color:var(--muted);font-size:.84rem;padding:16px 0;text-align:center;">✅ No pending approvals</div>';
+    return;
+  }
+  el.innerHTML = pending.map(p => `
+    <div class="detail-row">
+      <span class="dr-label" style="display:flex;align-items:center;gap:6px;">
+        <span style="font-size:.7rem;">${p.type==='Organizer'?'🏛️':'🏪'}</span> ${p.name}
+      </span>
+      <div style="display:flex;gap:6px;">
+        <button class="ta-btn approve" onclick="approveItem('${p.table}','${p.id}')">✓</button>
+        <button class="ta-btn reject"  onclick="rejectItem('${p.table}','${p.id}')">✗</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderRecentTable() {
+  const all = [
+    ...DATA.organizers.slice(0,5).map(o=>({type:'Organizer', name:o.org_name||o.first_name, contact:o.email, date:o.created_at, status:o.status, id:o.id, table:'org'})),
+    ...DATA.stalls.slice(0,5).map(s=>({type:'Stall', name:s.business_name, contact:s.phone, date:s.created_at, status:s.status, id:s.id, table:'stall'})),
+    ...DATA.visitors.slice(0,5).map(v=>({type:'Visitor', name:v.name||v.first_name, contact:v.phone, date:v.created_at, status:'registered', id:v.id, table:'visitor'})),
+  ].sort((a,b) => new Date(b.date||0) - new Date(a.date||0)).slice(0,12);
+
+  const tbody = document.getElementById('recent-tbody');
+  if (!all.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:40px;">No data yet — configure Supabase to see records here.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = all.map(r => `
+    <tr>
+      <td><span class="tag">${r.type}</span></td>
+      <td>${r.name||'—'}</td>
+      <td class="td-muted">${r.contact||'—'}</td>
+      <td class="td-muted">${r.date ? new Date(r.date).toLocaleDateString('en-IN') : '—'}</td>
+      <td><span class="badge ${r.status}">${r.status||'—'}</span></td>
+      <td>
+        <div class="td-actions">
+          ${r.table!=='visitor' ? `<button class="ta-btn approve" onclick="approveItem('${r.table}','${r.id}')">Approve</button>` : ''}
+          ${r.table!=='visitor' ? `<button class="ta-btn reject" onclick="rejectItem('${r.table}','${r.id}')">Reject</button>` : ''}
+          <button class="ta-btn view" onclick="showToast('Opening detail for ${r.name}…')">View</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// ── Section renderers ─────────────────────────────────
+function renderSection(key) {
+  if (key === 'expos')       renderExposTable();
+  if (key === 'organizers')  renderOrganizersTable();
+  if (key === 'stalls')      renderStallsTable();
+  if (key === 'visitors')    renderVisitorsTable();
+  if (key === 'contacts')    renderContactsTable();
+  if (key === 'settings')    renderSettings();
+}
+
+function fmtDate(d) { return d ? new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : '—'; }
+
+function renderExposTable() {
+  const filter = filterState.expo;
+  const list   = filter==='all' ? DATA.expos : DATA.expos.filter(e=>e.status===filter);
+  const tbody  = document.getElementById('expos-tbody');
+  if (!list.length) { tbody.innerHTML = emptyRow(8, 'No expos yet'); return; }
+  tbody.innerHTML = list.map(e => `
+    <tr>
+      <td><strong>${e.name||'—'}</strong></td>
+      <td class="td-muted">${e.city||'—'}</td>
+      <td class="td-muted">${e.category||'—'}</td>
+      <td class="td-muted">${fmtDate(e.start_date)}</td>
+      <td class="td-muted">${e.total_stalls||'—'}</td>
+      <td class="td-muted">${e.ticket_price===0?'Free':'₹'+e.ticket_price}</td>
+      <td><span class="badge ${e.status}">${e.status||'—'}</span></td>
+      <td><div class="td-actions">
+        <button class="ta-btn edit"   onclick="showToast('Edit expo: ${e.name}')">Edit</button>
+        <button class="ta-btn view"   onclick="showToast('View expo: ${e.name}')">View</button>
+      </div></td>
+    </tr>
+  `).join('');
+}
+
+function renderOrganizersTable() {
+  const filter = filterState.org;
+  const list   = filter==='all' ? DATA.organizers : DATA.organizers.filter(o=>o.status===filter);
+  const tbody  = document.getElementById('organizers-tbody');
+  if (!list.length) { tbody.innerHTML = emptyRow(8, 'No organizer registrations yet'); return; }
+  tbody.innerHTML = list.map(o => `
+    <tr>
+      <td><strong>${o.first_name||''} ${o.last_name||''}</strong></td>
+      <td class="td-muted">${o.org_name||'—'}</td>
+      <td class="td-muted">${o.city||'—'}${o.state?', '+o.state:''}</td>
+      <td class="td-muted">${o.phone||'—'}</td>
+      <td class="td-muted">${o.email||'—'}</td>
+      <td class="td-muted">${o.expo_name||'—'}</td>
+      <td><span class="badge ${o.status}">${o.status||'pending'}</span></td>
+      <td><div class="td-actions">
+        ${o.status==='pending'?`<button class="ta-btn approve" onclick="approveItem('org','${o.id}')">Approve</button><button class="ta-btn reject" onclick="rejectItem('org','${o.id}')">Reject</button>`:''}
+        <button class="ta-btn view" onclick="showToast('Viewing: ${(o.org_name||'').replace(/'/g,'')}')" >View</button>
+      </div></td>
+    </tr>
+  `).join('');
+}
+
+function renderStallsTable() {
+  const filter = filterState.stall;
+  const list   = filter==='all' ? DATA.stalls : DATA.stalls.filter(s=>s.status===filter);
+  const tbody  = document.getElementById('stalls-tbody');
+  if (!list.length) { tbody.innerHTML = emptyRow(8, 'No stall bookings yet'); return; }
+  tbody.innerHTML = list.map(s => `
+    <tr>
+      <td><strong>${s.business_name||'—'}</strong></td>
+      <td class="td-muted">${s.expo_name||'—'}</td>
+      <td class="td-muted">${s.category||'—'}</td>
+      <td class="td-muted">${s.stall_type||'—'}</td>
+      <td class="td-muted">${s.contact_name||'—'}</td>
+      <td class="td-muted">${s.phone||'—'}</td>
+      <td><span class="badge ${s.status}">${s.status||'pending'}</span></td>
+      <td><div class="td-actions">
+        ${s.status==='pending'?`<button class="ta-btn approve" onclick="approveItem('stall','${s.id}')">Approve</button><button class="ta-btn reject" onclick="rejectItem('stall','${s.id}')">Reject</button>`:''}
+        <button class="ta-btn view" onclick="showToast('Viewing: ${(s.business_name||'').replace(/'/g,'')}')">View</button>
+      </div></td>
+    </tr>
+  `).join('');
+}
+
+function renderVisitorsTable() {
+  const tbody = document.getElementById('visitors-tbody');
+  if (!DATA.visitors.length) { tbody.innerHTML = emptyRow(7, 'No visitor registrations yet'); return; }
+  tbody.innerHTML = DATA.visitors.map(v => `
+    <tr>
+      <td><strong>${v.name||v.first_name+' '+(v.last_name||'')}</strong></td>
+      <td class="td-muted">${v.expo_name||'—'}</td>
+      <td class="td-muted">${v.phone||'—'}</td>
+      <td class="td-muted">${v.email||'—'}</td>
+      <td class="td-muted">${v.city||'—'}</td>
+      <td class="td-muted">${v.ticket_count||1}</td>
+      <td class="td-muted">${fmtDate(v.created_at)}</td>
+    </tr>
+  `).join('');
+}
+
+function renderContactsTable() {
+  const filter = filterState.contact;
+  let list = DATA.contacts;
+  if (filter==='unreplied') list = list.filter(c=>!c.replied);
+  if (filter==='replied')   list = list.filter(c=>c.replied);
+  const tbody = document.getElementById('contacts-tbody');
+  if (!list.length) { tbody.innerHTML = emptyRow(8, 'No messages yet'); return; }
+  tbody.innerHTML = list.map(c => `
+    <tr>
+      <td><strong>${c.name||'—'}</strong></td>
+      <td class="td-muted">${c.role||'—'}</td>
+      <td class="td-muted">${c.subject||'—'}</td>
+      <td class="td-muted">${c.phone||'—'}</td>
+      <td class="td-muted">${c.email||'—'}</td>
+      <td class="td-muted">${fmtDate(c.created_at)}</td>
+      <td><span class="badge ${c.replied?'approved':'pending'}">${c.replied?'Replied':'Pending'}</span></td>
+      <td><div class="td-actions">
+        <button class="ta-btn view" onclick="showToast('Message: ${(c.message||'').slice(0,40).replace(/'/g,'')}…')">Read</button>
+        ${!c.replied?`<button class="ta-btn approve" onclick="markReplied('${c.id}')">Mark Replied</button>`:''}
+      </div></td>
+    </tr>
+  `).join('');
+}
+
+function renderSettings() {
+  const configured = !SUPABASE_URL.includes('YOUR_PROJECT');
+  document.getElementById('sb-url').textContent    = configured ? SUPABASE_URL : 'Not configured — edit js/supabase.js';
+  document.getElementById('sb-status').innerHTML   = configured
+    ? '<span class="badge approved">Connected</span>'
+    : '<span class="badge pending">Not configured</span>';
+}
+
+// ── Table filter helper ───────────────────────────────
+function filterTable(type, val, btn) {
+  if (type==='expo')    filterState.expo    = val;
+  if (type==='org')     filterState.org     = val;
+  if (type==='stall')   filterState.stall   = val;
+  if (type==='contact') filterState.contact = val;
+  btn.closest('.table-filters').querySelectorAll('.tfilter').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderSection(type==='expo'?'expos':type==='org'?'organizers':type==='stall'?'stalls':'contacts');
+}
+
+// ── Approve / Reject ─────────────────────────────────
+async function approveItem(table, id) {
+  try {
+    let res;
+    if (table==='org')   res = await Organizers.approve(id);
+    if (table==='stall') res = await Stalls.approve(id);
+    if (res?.error) throw res.error;
+    showToast('✅ Approved successfully!', 'ok');
+    await loadAllData();
+  } catch {
+    // Update local cache for demo
+    const map = { org:'organizers', stall:'stalls' };
+    const arr = DATA[map[table]];
+    const item = arr.find(x=>String(x.id)===String(id));
+    if (item) item.status = 'approved';
+    renderOverview(); renderSection(table==='org'?'organizers':'stalls');
+    showToast('✅ Approved (demo mode)', 'ok');
+  }
+}
+
+async function rejectItem(table, id) {
+  try {
+    let res;
+    if (table==='org')   res = await Organizers.reject(id);
+    if (table==='stall') res = await Stalls.reject(id);
+    if (res?.error) throw res.error;
+    showToast('Rejected.', '');
+    await loadAllData();
+  } catch {
+    const map = { org:'organizers', stall:'stalls' };
+    const arr = DATA[map[table]];
+    const item = arr.find(x=>String(x.id)===String(id));
+    if (item) item.status = 'rejected';
+    renderOverview(); renderSection(table==='org'?'organizers':'stalls');
+    showToast('Rejected (demo mode)', '');
+  }
+}
+
+async function markReplied(id) {
+  try {
+    await dbUpdate('contacts', id, { replied: true });
+    showToast('Marked as replied', 'ok');
+    await loadAllData();
+  } catch {
+    const item = DATA.contacts.find(c=>String(c.id)===String(id));
+    if (item) item.replied = true;
+    renderContactsTable();
+    showToast('Marked as replied (demo)', 'ok');
+  }
+}
+
+// ── Add Expo Modal ────────────────────────────────────
+function openAddExpoModal() {
+  document.getElementById('expo-modal').style.display = 'flex';
+}
+function closeExpoModal() {
+  document.getElementById('expo-modal').style.display = 'none';
+}
+document.getElementById('expo-modal-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const fd   = new FormData(this);
+  const data = { ...Object.fromEntries(fd.entries()), approved: true };
+  try {
+    const { error } = await dbInsert('expos', data);
+    if (error) throw error;
+    showToast('✅ Expo added!', 'ok');
+    await loadAllData();
+  } catch {
+    showToast('Expo saved (demo mode)', 'ok');
+  }
+  closeExpoModal();
+  this.reset();
+});
+
+// ── Pending notifications ─────────────────────────────
+function checkPendingNotifications() {
+  const hasContacts = DATA.contacts.some(c=>!c.replied);
+  document.getElementById('contact-dot').style.display = hasContacts ? 'inline-block' : 'none';
+}
+
+// ── Global search ─────────────────────────────────────
+function globalSearch(q) {
+  if (!q) return;
+  q = q.toLowerCase();
+  const hits = [
+    ...DATA.organizers.filter(o=>(o.org_name||'').toLowerCase().includes(q)||(o.email||'').toLowerCase().includes(q)),
+    ...DATA.stalls.filter(s=>(s.business_name||'').toLowerCase().includes(q)),
+    ...DATA.visitors.filter(v=>(v.name||'').toLowerCase().includes(q)),
+  ];
+  if (hits.length) showToast(`Found ${hits.length} result(s)`, 'ok');
+  else showToast('No results found', '');
+}
+
+// ── Logout ────────────────────────────────────────────
+async function handleLogout() {
+  await Auth.signOut();
+  window.location.href = 'admin-login.html';
+}
+
+// ── Avatar initial ────────────────────────────────────
+Auth.getSession().then(session => {
+  if (session?.user?.email) {
+    const init = session.user.email[0].toUpperCase();
+    document.getElementById('admin-avatar').textContent = init;
+  }
+});
+
+function emptyRow(cols, msg) {
+  return `<tr><td colspan="${cols}" style="text-align:center;color:var(--muted);padding:40px;">${msg}</td></tr>`;
+}
+
+// ── Init ──────────────────────────────────────────────
+loadAllData();
+</script>
+</body>
+</html>

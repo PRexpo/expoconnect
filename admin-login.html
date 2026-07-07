@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Admin Login — ExpoConnect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/forms.css"/>
+  <link rel="stylesheet" href="css/admin.css"/>
+</head>
+<body>
+
+<canvas id="three-canvas"></canvas>
+
+<div class="shell" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;">
+
+  <div class="login-card rv">
+
+    <div class="logo-center">
+      <div class="logo" style="justify-content:center;font-size:1.5rem;margin-bottom:6px;">
+        Expo<em>Connect</em><small>.ai.in</small>
+      </div>
+      <p style="font-size:.83rem;color:var(--muted);margin-top:6px;">Admin Dashboard Access</p>
+    </div>
+
+    <!-- Success redirect message (shows if just logged in) -->
+    <div id="login-success" style="display:none;text-align:center;padding:10px 0 20px;">
+      <div style="font-size:2rem;margin-bottom:8px;">✅</div>
+      <p style="color:var(--green);font-weight:600;">Login successful! Redirecting…</p>
+    </div>
+
+    <form id="login-form" novalidate>
+
+      <div class="fg">
+        <label>Admin Email <span class="req">*</span></label>
+        <div class="input-wrap">
+          <span class="input-icon">✉</span>
+          <input type="email" name="email" id="login-email" placeholder="admin@expoconnect.ai.in" required autocomplete="email">
+        </div>
+      </div>
+
+      <div class="fg">
+        <label>Password <span class="req">*</span></label>
+        <div style="position:relative;">
+          <input type="password" name="password" id="login-password" placeholder="••••••••" required autocomplete="current-password"
+            style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:12px 42px 12px 15px;color:var(--text);font-size:.9rem;outline:none;transition:border-color .2s;">
+          <button type="button" id="toggle-pw"
+            style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:.9rem;"
+            onclick="togglePassword()">👁</button>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;">
+        <div class="fcheck" style="margin:0;">
+          <input type="checkbox" id="remember" name="remember">
+          <label for="remember" style="font-size:.8rem;">Remember me</label>
+        </div>
+        <a href="#" style="font-size:.8rem;color:var(--accent);">Forgot password?</a>
+      </div>
+
+      <div id="login-error" style="display:none;background:rgba(255,77,109,.1);border:1px solid rgba(255,77,109,.3);border-radius:8px;padding:10px 14px;font-size:.83rem;color:var(--red);margin-bottom:16px;text-align:center;">
+        Invalid email or password. Please try again.
+      </div>
+
+      <button type="submit" class="form-submit" id="submit-btn" data-label="Sign In">
+        <span class="spinner"></span>
+        <span class="btn-text">Sign In to Dashboard →</span>
+      </button>
+
+    </form>
+
+    <p style="text-align:center;margin-top:22px;font-size:.8rem;color:var(--muted);">
+      Not an admin? <a href="index.html" style="color:var(--accent);">Back to ExpoConnect →</a>
+    </p>
+
+  </div>
+
+</div>
+<div id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/bg3d.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/app.js"></script>
+<script>
+  initBG({ particleCount: 300, icoCount: 4, intensity: 0.4 });
+
+  // Redirect if already logged in
+  Auth.getSession().then(session => {
+    if (session) window.location.href = 'dashboard.html';
+  });
+
+  function togglePassword() {
+    const inp = document.getElementById('login-password');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+  }
+
+  document.getElementById('login-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn      = document.getElementById('submit-btn');
+    const errBox   = document.getElementById('login-error');
+    const email    = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+
+    errBox.style.display = 'none';
+    if (!email || !password) { showToast('Please enter email and password', 'err'); return; }
+
+    setSubmitLoading(btn, true);
+
+    try {
+      const { error } = await Auth.signIn(email, password);
+      if (error) throw new Error(error.message);
+
+      document.getElementById('login-form').style.display    = 'none';
+      document.getElementById('login-success').style.display = 'block';
+      setTimeout(() => window.location.href = 'dashboard.html', 1200);
+
+    } catch(err) {
+      // Demo mode — allow any login for preview
+      if (SUPABASE_URL.includes('YOUR_PROJECT')) {
+        document.getElementById('login-form').style.display    = 'none';
+        document.getElementById('login-success').style.display = 'block';
+        setTimeout(() => window.location.href = 'dashboard.html', 1200);
+      } else {
+        errBox.style.display = 'block';
+        setSubmitLoading(btn, false);
+      }
+    }
+  });
+</script>
+</body>
+</html>

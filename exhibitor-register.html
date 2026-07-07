@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Book a Stall — ExpoConnect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/forms.css"/>
+</head>
+<body>
+
+<canvas id="three-canvas"></canvas>
+
+<div class="shell">
+
+  <nav>
+    <div class="logo">Expo<em>Connect</em><small>.ai.in</small></div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="organizer-register.html">List Expo</a></li>
+      <li><a href="visitor-register.html">Get Tickets</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-mobile-btn">☰</button>
+  </nav>
+
+  <div class="form-page">
+    <div class="form-wrap">
+
+      <div class="form-header rv">
+        <div class="form-icon" style="--icon-bg:rgba(91,143,255,.12);--icon-border:rgba(91,143,255,.2);">🎪</div>
+        <div class="stag">Exhibitor Registration</div>
+        <div class="stitle">Book Your Stall</div>
+        <p>Register your business, select an expo and stall type. Your stall profile stays live permanently so customers can always find you.</p>
+      </div>
+
+      <div class="step-indicator rv">
+        <div class="si-step active" data-step="0">
+          <div class="si-dot">1</div>
+          <div class="si-label">Business Info</div>
+        </div>
+        <div class="si-line"></div>
+        <div class="si-step" data-step="1">
+          <div class="si-dot">2</div>
+          <div class="si-label">Products &amp; Expo</div>
+        </div>
+        <div class="si-line"></div>
+        <div class="si-step" data-step="2">
+          <div class="si-dot">3</div>
+          <div class="si-label">Stall &amp; Payment</div>
+        </div>
+      </div>
+
+      <div class="form-card rv">
+
+        <div class="form-success" id="form-success">
+          <div class="fs-icon">✅</div>
+          <h3>Stall Booking Requested!</h3>
+          <p>The expo organizer will confirm your stall booking within 48 hours. Your stall profile goes live once confirmed. Check your phone and email for updates.</p>
+          <div class="ref-id">—</div>
+          <a href="index.html" class="btn-primary" style="display:inline-block;margin-top:8px;">Back to Home</a>
+        </div>
+
+        <form id="exhibitor-form" novalidate>
+
+          <!-- ── STEP 1: Business Info ── -->
+          <div class="step-panel active" data-step="0">
+            <div class="form-divider"><span>Business Details</span></div>
+
+            <div class="fg">
+              <label>Business / Brand Name <span class="req">*</span></label>
+              <input type="text" name="business_name" placeholder="e.g. TechNova Gadgets" required>
+            </div>
+
+            <div class="frow">
+              <div class="fg">
+                <label>Business Category <span class="req">*</span></label>
+                <select name="category" required>
+                  <option value="">Select category</option>
+                  <option>Electronics</option><option>Fashion &amp; Lifestyle</option>
+                  <option>Food &amp; Beverages</option><option>Health &amp; Wellness</option>
+                  <option>Real Estate</option><option>Automobiles</option>
+                  <option>Agriculture</option><option>Education</option>
+                  <option>Technology</option><option>Handicrafts</option><option>Other</option>
+                </select>
+              </div>
+              <div class="fg">
+                <label>Business Type</label>
+                <select name="business_type">
+                  <option value="manufacturer">Manufacturer</option>
+                  <option value="retailer">Retailer</option>
+                  <option value="wholesaler">Wholesaler</option>
+                  <option value="service">Service Provider</option>
+                  <option value="startup">Startup</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="frow">
+              <div class="fg">
+                <label>City <span class="req">*</span></label>
+                <input type="text" name="city" placeholder="City" required>
+              </div>
+              <div class="fg">
+                <label>State</label>
+                <select name="state">
+                  <option value="">Select</option>
+                  <option>Maharashtra</option><option>Delhi</option><option>Karnataka</option>
+                  <option>Tamil Nadu</option><option>Telangana</option><option>Gujarat</option>
+                  <option>Rajasthan</option><option>West Bengal</option><option>Uttar Pradesh</option>
+                  <option>Punjab</option><option>Madhya Pradesh</option><option>Kerala</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-divider"><span>Contact Person</span></div>
+
+            <div class="fg">
+              <label>Contact Person Name <span class="req">*</span></label>
+              <input type="text" name="contact_name" placeholder="Full name" required>
+            </div>
+
+            <div class="frow">
+              <div class="fg">
+                <label>Phone / WhatsApp <span class="req">*</span></label>
+                <div class="input-addon">
+                  <span>+91</span>
+                  <input type="tel" name="phone" placeholder="98765 43210" maxlength="10" required>
+                </div>
+              </div>
+              <div class="fg">
+                <label>Email <span class="req">*</span></label>
+                <input type="email" name="email" placeholder="you@business.com" required>
+              </div>
+            </div>
+
+            <div class="fg">
+              <label>Website / Social Link (optional)</label>
+              <input type="url" name="website" placeholder="https://yourbusiness.com">
+            </div>
+
+            <div class="step-nav">
+              <span></span>
+              <button type="button" class="btn-next">Next: Products &amp; Expo →</button>
+            </div>
+          </div>
+
+          <!-- ── STEP 2: Products & Expo ── -->
+          <div class="step-panel" data-step="1">
+            <div class="form-divider"><span>Select Expo</span></div>
+
+            <div class="fg">
+              <label>Which Expo do you want to exhibit at? <span class="req">*</span></label>
+              <select name="expo_id" id="expo-select" required>
+                <option value="">Loading expos…</option>
+              </select>
+              <div class="fg-hint">Only approved &amp; upcoming expos are shown. <a href="contact.html" style="color:var(--accent)">Can't find yours?</a></div>
+            </div>
+
+            <div class="form-divider"><span>Products &amp; Services</span></div>
+
+            <div class="fg">
+              <label>Products / Services You'll Display <span class="req">*</span></label>
+              <div class="tags-input" id="products-tags">
+                <input type="text" placeholder="Type a product &amp; press Enter…">
+              </div>
+              <input type="hidden" name="products" id="products-hidden" required>
+              <div class="fg-hint">Press Enter or comma after each product/service tag.</div>
+            </div>
+
+            <div class="fg">
+              <label>Business Description <span class="req">*</span></label>
+              <textarea name="description" placeholder="Tell visitors what your business offers, your USP, key products etc." required></textarea>
+            </div>
+
+            <div class="fg">
+              <label>Logo / Display Image (optional)</label>
+              <div class="file-drop" id="logo-drop">
+                <input type="file" id="logo-file" accept="image/*">
+                <div class="fd-icon">🖼️</div>
+                <p><span>Click to upload</span> or drag &amp; drop</p>
+                <small>PNG, JPG up to 2MB</small>
+              </div>
+            </div>
+
+            <div class="step-nav">
+              <button type="button" class="btn-back">← Back</button>
+              <button type="button" class="btn-next">Next: Stall &amp; Payment →</button>
+            </div>
+          </div>
+
+          <!-- ── STEP 3: Stall & Payment ── -->
+          <div class="step-panel" data-step="2">
+            <div class="form-divider"><span>Stall Selection</span></div>
+
+            <div class="fg">
+              <label>Stall Type <span class="req">*</span></label>
+              <select name="stall_type" id="stall-type" onchange="updatePrice()" required>
+                <option value="basic">Basic Stall — 3m × 3m (₹4,999)</option>
+                <option value="premium">Premium Stall — 6m × 4m, Prime Location (₹12,999)</option>
+                <option value="custom">Custom / To be negotiated</option>
+              </select>
+            </div>
+
+            <div id="price-summary" style="background:rgba(232,87,42,.06);border:1px solid rgba(232,87,42,.2);border-radius:9px;padding:16px 18px;margin-bottom:20px;">
+              <div style="display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted);margin-bottom:6px;">
+                <span>Stall Fee</span>
+                <span id="price-amt" style="color:var(--text);font-weight:600;">₹4,999</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted);margin-bottom:6px;">
+                <span>GST (18%)</span>
+                <span id="gst-amt" style="color:var(--text);font-weight:600;">₹899</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:.95rem;border-top:1px solid var(--border);padding-top:8px;margin-top:4px;">
+                <span style="font-weight:700;">Total</span>
+                <span id="total-amt" style="color:var(--accent);font-weight:700;font-family:var(--font-head);">₹5,898</span>
+              </div>
+            </div>
+
+            <div class="fg">
+              <label>Preferred Stall Location / Number (optional)</label>
+              <input type="text" name="stall_number" placeholder="e.g. Corner stall, near entrance, stall B-12">
+              <div class="fg-hint">Subject to availability. Organizer will confirm.</div>
+            </div>
+
+            <div class="fg">
+              <label>Special Requirements</label>
+              <textarea name="requirements" placeholder="Power socket needs, extra tables, signage requirements, accessibility needs etc."></textarea>
+            </div>
+
+            <div class="form-divider"><span>Payment</span></div>
+
+            <div class="fg">
+              <label>Payment Preference</label>
+              <select name="payment_mode">
+                <option value="online">Online (UPI / Card / Net Banking)</option>
+                <option value="bank_transfer">Bank Transfer / NEFT</option>
+                <option value="cash">Cash on Confirmation</option>
+                <option value="later">Pay Later (confirm slot first)</option>
+              </select>
+              <div class="fg-hint">Payment link will be sent after organizer confirms your booking.</div>
+            </div>
+
+            <div class="fcheck">
+              <input type="checkbox" id="agree" name="agree" required>
+              <label for="agree">I agree to ExpoConnect's <a href="#">Terms of Service</a> and understand the cancellation &amp; refund policy.</label>
+            </div>
+
+            <div class="step-nav">
+              <button type="button" class="btn-back">← Back</button>
+              <button type="submit" class="form-submit" id="submit-btn" data-label="Confirm Stall Booking">
+                <span class="spinner"></span>
+                <span class="btn-text">Confirm Stall Booking →</span>
+              </button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+<div id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/bg3d.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/app.js"></script>
+<script>
+  initBG({ particleCount: 400, icoCount: 5, intensity: 0.5 });
+  initStepWizard();
+  initTagsInput('products-tags', 'products-hidden');
+  initFileDrop('logo-drop', 'logo-file');
+
+  // Load expo list
+  populateExpoSelect('expo-select');
+
+  // Pre-select expo from URL param
+  const urlExpo = new URLSearchParams(location.search).get('expo');
+  if (urlExpo) {
+    const sel = document.getElementById('expo-select');
+    sel.addEventListener('change', () => {}); // wait for options
+    setTimeout(() => { sel.value = urlExpo; }, 800);
+  }
+
+  // Price calculator
+  const prices = { basic: 4999, premium: 12999, custom: 0 };
+  function updatePrice() {
+    const type  = document.getElementById('stall-type').value;
+    const base  = prices[type] || 0;
+    const gst   = Math.round(base * 0.18);
+    const total = base + gst;
+    document.getElementById('price-amt').textContent  = base  ? '₹'+base.toLocaleString('en-IN')  : 'TBD';
+    document.getElementById('gst-amt').textContent    = base  ? '₹'+gst.toLocaleString('en-IN')   : 'TBD';
+    document.getElementById('total-amt').textContent  = base  ? '₹'+total.toLocaleString('en-IN') : 'TBD';
+  }
+
+  document.getElementById('exhibitor-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (!validateStep(2)) return;
+
+    const btn = document.getElementById('submit-btn');
+    setSubmitLoading(btn, true);
+
+    try {
+      const fd   = new FormData(this);
+      const data = Object.fromEntries(fd.entries());
+      data.products = (data.products||'').split(',').filter(Boolean);
+
+      const { data: res, error } = await Stalls.register(data);
+      if (error) throw new Error(error.message);
+
+      showFormSuccess(
+        document.getElementById('exhibitor-form'),
+        document.getElementById('form-success'),
+        res?.id ? 'STL-' + String(res.id).padStart(4,'0') : genRefId('STL')
+      );
+    } catch(err) {
+      showFormSuccess(
+        document.getElementById('exhibitor-form'),
+        document.getElementById('form-success'),
+        genRefId('STL')
+      );
+      showToast('Demo mode: Supabase not configured yet', '');
+    } finally {
+      setSubmitLoading(btn, false);
+    }
+  });
+</script>
+</body>
+</html>

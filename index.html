@@ -1,197 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>ExpoConnect — India's Expo Platform</title>
-<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800&display=swap" rel="stylesheet"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<style>
-:root{
-  --bg:#03020a;--surface:#0d0c18;--surface2:#14132280;
-  --border:rgba(255,255,255,0.07);--border-h:rgba(255,255,255,0.14);
-  --accent:#e8572a;--accent2:#f0a500;--blue:#5b8fff;--green:#00c97a;
-  --text:#eeeaf8;--muted:#6e6b82;
-  --font-head:'Clash Display',sans-serif;--font-body:'Cabinet Grotesk',sans-serif;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--text);font-family:var(--font-body);overflow-x:hidden;}
-
-#three-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
-.shell{position:relative;z-index:1;}
-
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 6%;background:rgba(3,2,10,0.72);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);}
-.logo{font-family:var(--font-head);font-weight:700;font-size:1.35rem;letter-spacing:-.5px;display:flex;align-items:baseline;gap:2px;}
-.logo em{color:var(--accent);font-style:normal;}
-.logo small{font-size:.48rem;color:var(--muted);letter-spacing:1px;margin-left:3px;vertical-align:middle;}
-.nav-links{display:flex;gap:28px;list-style:none;}
-.nav-links a{font-size:.85rem;font-weight:500;color:var(--muted);text-decoration:none;transition:color .2s;}
-.nav-links a:hover{color:var(--text);}
-.nav-cta{background:var(--accent);color:#fff;border:none;padding:9px 22px;border-radius:7px;font-family:var(--font-body);font-weight:700;font-size:.85rem;cursor:pointer;transition:opacity .2s;text-decoration:none;}
-.nav-cta:hover{opacity:.85;}
-
-/* HERO */
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 6% 80px;position:relative;}
-.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(232,87,42,.12);border:1px solid rgba(232,87,42,.3);border-radius:100px;padding:6px 18px;font-size:.75rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:30px;animation:riseIn .7s ease both;}
-.hero-eyebrow::before{content:'●';animation:blink 1.4s infinite;}
-@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
-h1.hero-title{font-family:var(--font-head);font-size:clamp(2.8rem,8vw,5.8rem);font-weight:700;line-height:1.03;letter-spacing:-2.5px;margin-bottom:26px;animation:riseIn .75s .1s ease both;}
-h1.hero-title .hi{color:var(--accent);}
-h1.hero-title .city{background:linear-gradient(90deg,var(--blue),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.hero-sub{font-size:1.1rem;color:var(--muted);max-width:500px;line-height:1.75;margin-bottom:46px;animation:riseIn .75s .2s ease both;}
-.hero-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;animation:riseIn .75s .3s ease both;}
-.btn-primary{background:var(--accent);color:#fff;padding:14px 34px;border-radius:9px;font-weight:700;font-size:.95rem;text-decoration:none;border:none;cursor:pointer;box-shadow:0 0 40px rgba(232,87,42,.4);transition:transform .2s,box-shadow .2s;font-family:var(--font-body);}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 60px rgba(232,87,42,.55);}
-.btn-ghost{border:1px solid var(--border-h);color:var(--text);padding:14px 34px;border-radius:9px;font-weight:500;font-size:.95rem;text-decoration:none;background:rgba(255,255,255,.03);transition:background .2s,border-color .2s;}
-.btn-ghost:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.2);}
-.hero-badges{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:56px;animation:riseIn .75s .45s ease both;}
-.hbadge{padding:8px 18px;border-radius:100px;border:1px solid var(--border);background:rgba(255,255,255,.03);font-size:.8rem;color:var(--muted);backdrop-filter:blur(10px);}
-@keyframes riseIn{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:none;}}
-
-/* SECTIONS */
-section.wrap{padding:110px 6%;}
-.stag{font-size:.72rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
-.stitle{font-family:var(--font-head);font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-1.2px;line-height:1.1;margin-bottom:14px;}
-.ssub{color:var(--muted);font-size:.97rem;line-height:1.75;max-width:460px;}
-
-/* WHO WE SERVE */
-.serve-bg{background:linear-gradient(180deg,var(--bg) 0%,var(--surface) 30%,var(--surface) 70%,var(--bg) 100%);}
-.serve-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1px;margin-top:60px;border:1px solid var(--border);border-radius:16px;overflow:hidden;}
-.serve-card{background:var(--surface);padding:44px 38px;border-right:1px solid var(--border);position:relative;overflow:hidden;transition:background .25s;}
-.serve-card:last-child{border-right:none;}
-.serve-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--card-line,var(--accent));transform:scaleX(0);transform-origin:left;transition:transform .35s;}
-.serve-card:hover{background:rgba(255,255,255,.025);}
-.serve-card:hover::after{transform:scaleX(1);}
-.serve-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:26px;background:var(--icon-bg);}
-.serve-card h3{font-family:var(--font-head);font-size:1.2rem;font-weight:600;margin-bottom:10px;}
-.serve-card p{color:var(--muted);font-size:.88rem;line-height:1.7;margin-bottom:20px;}
-.serve-list{list-style:none;display:flex;flex-direction:column;gap:9px;}
-.serve-list li{font-size:.82rem;color:var(--muted);padding-left:16px;position:relative;}
-.serve-list li::before{content:'→';position:absolute;left:0;color:var(--accent);font-size:.72rem;top:1px;}
-.serve-cta{display:inline-flex;align-items:center;gap:6px;margin-top:24px;font-size:.82rem;font-weight:700;color:var(--accent);text-decoration:none;cursor:pointer;border:none;background:none;font-family:var(--font-body);transition:gap .2s;}
-.serve-cta:hover{gap:10px;}
-
-/* FILTER TABS */
-.filter-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:44px 0 28px;}
-.ftab{padding:7px 18px;border-radius:100px;border:1px solid var(--border);font-size:.78rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .18s;background:transparent;font-family:var(--font-body);}
-.ftab.on,.ftab:hover{background:var(--accent);border-color:var(--accent);color:#fff;}
-
-/* EXPO GRID */
-.expo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:18px;}
-.expo-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .22s,border-color .22s;cursor:pointer;}
-.expo-card:hover{transform:translateY(-5px);border-color:var(--border-h);}
-.expo-thumb{height:155px;display:flex;align-items:center;justify-content:center;font-size:2.8rem;position:relative;background:linear-gradient(135deg,#111,#1a1a2e);}
-.thumb-city{position:absolute;top:11px;left:11px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);padding:3px 12px;border-radius:100px;font-size:.7rem;font-weight:600;}
-.thumb-status{position:absolute;top:11px;right:11px;padding:3px 11px;border-radius:100px;font-size:.68rem;font-weight:700;}
-.s-live{background:rgba(0,201,122,.18);color:var(--green);border:1px solid rgba(0,201,122,.35);}
-.s-upcoming{background:rgba(91,143,255,.18);color:var(--blue);border:1px solid rgba(91,143,255,.35);}
-.s-past{background:rgba(255,255,255,.07);color:var(--muted);}
-.expo-body{padding:20px 20px 16px;}
-.expo-body h4{font-family:var(--font-head);font-weight:600;font-size:1rem;margin-bottom:6px;}
-.expo-meta{display:flex;flex-wrap:wrap;gap:12px;font-size:.74rem;color:var(--muted);margin-bottom:14px;}
-.expo-foot{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border);}
-.ep-price{font-family:var(--font-head);font-size:.98rem;font-weight:700;}
-.ep-price.free{color:var(--green);}
-.ep-price.paid{color:var(--accent2);}
-.ep-btn{padding:7px 17px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:var(--font-body);transition:opacity .18s;}
-.ep-btn:hover{opacity:.8;}
-
-/* EMPTY STATE */
-.empty-state{grid-column:1/-1;text-align:center;padding:80px 20px;color:var(--muted);}
-.empty-state .es-icon{font-size:2.8rem;margin-bottom:14px;}
-.empty-state strong{display:block;font-family:var(--font-head);font-size:1.1rem;color:rgba(255,255,255,.4);margin-bottom:6px;}
-.empty-state p{font-size:.86rem;color:var(--muted);}
-
-/* STALL DIRECTORY */
-.dir-bg{background:linear-gradient(180deg,var(--bg) 0%,var(--surface) 20%,var(--surface) 80%,var(--bg) 100%);}
-.dir-search{display:flex;gap:12px;flex-wrap:wrap;margin:44px 0 32px;}
-.dir-input{flex:1;min-width:220px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 18px;color:var(--text);font-family:var(--font-body);font-size:.88rem;outline:none;transition:border-color .2s;}
-.dir-input:focus{border-color:rgba(232,87,42,.5);}
-.dir-input::placeholder{color:var(--muted);}
-.stall-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(252px,1fr));gap:14px;}
-.stall-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:22px;transition:border-color .2s,transform .2s;}
-.stall-card:hover{border-color:rgba(232,87,42,.3);transform:translateY(-2px);}
-.sc-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
-.sc-icon{width:42px;height:42px;border-radius:10px;background:rgba(91,143,255,.15);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
-.sc-info h5{font-family:var(--font-head);font-weight:600;font-size:.92rem;}
-.sc-info .sc-expo{font-size:.72rem;color:var(--muted);}
-.sc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;}
-.sc-tag{padding:2px 9px;border-radius:100px;background:rgba(255,255,255,.06);font-size:.7rem;color:var(--muted);}
-.sc-foot{display:flex;align-items:center;justify-content:space-between;}
-.sc-phone{font-size:.78rem;color:var(--blue);font-weight:500;}
-.sc-view{font-size:.75rem;color:var(--accent);font-weight:700;cursor:pointer;border:none;background:none;font-family:var(--font-body);}
-
-/* HOW IT WORKS */
-.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:36px;margin-top:60px;}
-.step{text-align:center;}
-.step-n{width:52px;height:52px;border-radius:50%;margin:0 auto 18px;border:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:700;font-size:1.05rem;color:var(--accent);}
-.step h4{font-family:var(--font-head);font-weight:600;font-size:.98rem;margin-bottom:8px;}
-.step p{color:var(--muted);font-size:.83rem;line-height:1.65;}
-
-/* PRICING */
-.pricing-bg{background:linear-gradient(180deg,var(--bg) 0%,#0c0b1a 50%,var(--bg) 100%);}
-.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:56px;}
-.pc{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:34px 28px;position:relative;transition:border-color .2s;}
-.pc.feat{border-color:var(--accent);background:linear-gradient(145deg,rgba(232,87,42,.07),var(--surface));}
-.pc.feat::before{content:'Most Popular';position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:3px 16px;border-radius:100px;font-size:.68rem;font-weight:700;white-space:nowrap;}
-.pc-type{font-size:.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
-.pc-price{font-family:var(--font-head);font-size:2.3rem;font-weight:700;margin-bottom:4px;}
-.pc-price span{font-size:.9rem;font-weight:400;color:var(--muted);}
-.pc-desc{font-size:.83rem;color:var(--muted);margin-bottom:24px;}
-.pc-feats{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:28px;}
-.pc-feats li{font-size:.84rem;color:var(--muted);padding-left:18px;position:relative;}
-.pc-feats li::before{content:'✓';position:absolute;left:0;color:var(--green);font-weight:700;}
-.pc-btn{width:100%;padding:12px;border-radius:8px;font-weight:700;font-size:.88rem;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text);font-family:var(--font-body);transition:all .2s;}
-.pc.feat .pc-btn{background:var(--accent);border-color:var(--accent);color:#fff;}
-.pc-btn:hover{opacity:.8;}
-
-/* MODALS */
-.overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.78);backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:20px;}
-.overlay.open{display:flex;}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:18px;width:100%;max-width:500px;max-height:92vh;overflow-y:auto;padding:38px;}
-.mhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;}
-.mhead h3{font-family:var(--font-head);font-weight:700;font-size:1.25rem;}
-.mclose{background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;padding:4px;transition:color .2s;}
-.mclose:hover{color:var(--text);}
-.fg{margin-bottom:18px;}
-.fg label{display:block;font-size:.78rem;font-weight:700;letter-spacing:.3px;color:var(--muted);margin-bottom:7px;}
-.fg input,.fg select,.fg textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:11px 15px;color:var(--text);font-family:var(--font-body);font-size:.88rem;outline:none;transition:border-color .2s;}
-.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:rgba(232,87,42,.5);}
-.fg textarea{height:80px;resize:vertical;}
-.fg select option{background:var(--surface);}
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.msubmit{width:100%;padding:13px;background:var(--accent);border:none;border-radius:8px;color:#fff;font-family:var(--font-head);font-weight:700;font-size:.92rem;cursor:pointer;transition:opacity .2s;margin-top:6px;}
-.msubmit:hover{opacity:.85;}
-.msuccess{display:none;text-align:center;padding:16px 0;}
-.msuccess .ms-icon{font-size:3rem;margin-bottom:12px;}
-.msuccess h4{font-family:var(--font-head);font-weight:700;font-size:1.15rem;margin-bottom:8px;}
-.msuccess p{color:var(--muted);font-size:.87rem;}
-
-/* TOAST */
-#toast{position:fixed;bottom:28px;right:28px;z-index:300;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 20px;font-size:.85rem;font-weight:500;transform:translateY(70px);opacity:0;transition:all .3s;max-width:280px;}
-#toast.show{transform:none;opacity:1;}
-#toast.ok{border-color:rgba(0,201,122,.4);color:var(--green);}
-
-/* FOOTER */
-footer{border-top:1px solid var(--border);padding:60px 6% 36px;}
-.fg-grid{display:grid;grid-template-columns:2fr repeat(3,1fr);gap:40px;margin-bottom:44px;}
-.fb p{color:var(--muted);font-size:.85rem;line-height:1.75;margin-top:12px;max-width:270px;}
-.fc h6{font-family:var(--font-head);font-weight:600;font-size:.88rem;margin-bottom:14px;}
-.fc ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
-.fc ul a{color:var(--muted);text-decoration:none;font-size:.82rem;transition:color .2s;}
-.fc ul a:hover{color:var(--text);}
-.fb-bot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:24px;border-top:1px solid var(--border);}
-.fb-bot p,.fb-bot span{font-size:.78rem;color:var(--muted);}
-
-/* REVEAL */
-.rv{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease;}
-.rv.in{opacity:1;transform:none;}
-
-@media(max-width:768px){.nav-links{display:none;}.fg-grid{grid-template-columns:1fr 1fr;}.frow{grid-template-columns:1fr;}}
-@media(max-width:480px){.fg-grid{grid-template-columns:1fr;}.modal{padding:22px;}}
-</style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>ExpoConnect — India's Expo Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
 </head>
 <body>
 
@@ -199,572 +13,360 @@ footer{border-top:1px solid var(--border);padding:60px 6% 36px;}
 
 <div class="shell">
 
-<!-- NAV -->
-<nav>
-  <div class="logo">Expo<em>Connect</em><small>.ai.in</small></div>
-  <ul class="nav-links">
-    <li><a href="#expos">Expos</a></li>
-    <li><a href="#stalls">Stall Directory</a></li>
-    <li><a href="#how">How It Works</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-  </ul>
-  <a class="nav-cta" href="#" onclick="openModal('organizer');return false;">List Your Expo</a>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-eyebrow">🇮🇳 India's Expo Connection Platform</div>
-  <h1 class="hero-title">Every <span class="hi">Expo</span>.<br>Every <span class="city">City</span>.</h1>
-  <p class="hero-sub">Discover expos near you, book stalls, grab tickets — and find every exhibitor long after the event wraps up.</p>
-  <div class="hero-btns">
-    <a class="btn-primary" href="#expos">Explore Expos</a>
-    <a class="btn-ghost" href="#stalls">Browse Stall Directory</a>
-  </div>
-  <div class="hero-badges">
-    <span class="hbadge">🏛️ For Organizers</span>
-    <span class="hbadge">🎪 For Stall Owners</span>
-    <span class="hbadge">🎟️ For Attendees</span>
-    <span class="hbadge">📦 Permanent Archive</span>
-  </div>
-</section>
-
-<!-- WHO WE SERVE -->
-<section class="wrap serve-bg" id="serve">
-  <div class="stag rv">Who It's For</div>
-  <div class="stitle rv">Three Pillars of Every Expo</div>
-  <div class="serve-grid rv">
-    <div class="serve-card" style="--card-line:var(--accent);--icon-bg:rgba(232,87,42,.12);">
-      <div class="serve-icon">🏛️</div>
-      <h3>Organizers</h3>
-      <p>Create &amp; manage your expo. Sell stall slots, issue tickets, and keep your event discoverable forever.</p>
-      <ul class="serve-list">
-        <li>Create expo listing with venue &amp; schedule</li>
-        <li>Sell stall slots with custom pricing</li>
-        <li>Issue free or paid attendee tickets</li>
-        <li>Dashboard: bookings, revenue &amp; analytics</li>
-        <li>Permanent event archive page</li>
-      </ul>
-      <button class="serve-cta" onclick="openModal('organizer')">List Your Expo →</button>
-    </div>
-    <div class="serve-card" style="--card-line:var(--blue);--icon-bg:rgba(91,143,255,.12);">
-      <div class="serve-icon">🎪</div>
-      <h3>Stall Owners</h3>
-      <p>Book your space and get a permanent digital presence — before, during, and long after the event ends.</p>
-      <ul class="serve-list">
-        <li>Browse &amp; book available stall slots</li>
-        <li>Upload products, photos &amp; contact info</li>
-        <li>Stall page stays live after the event</li>
-        <li>Customers find you via stall directory</li>
-        <li>Receive leads &amp; enquiries from visitors</li>
-      </ul>
-      <button class="serve-cta" style="color:var(--blue)" onclick="openModal('stall')">Book a Stall →</button>
-    </div>
-    <div class="serve-card" style="--card-line:var(--green);--icon-bg:rgba(0,201,122,.12);">
-      <div class="serve-icon">🎟️</div>
-      <h3>Attendees</h3>
-      <p>Discover expos near you, get your ticket, and pre-browse every exhibitor before you even arrive.</p>
-      <ul class="serve-list">
-        <li>Find expos by city, category &amp; date</li>
-        <li>Free or paid ticket booking</li>
-        <li>Pre-browse all stalls &amp; products</li>
-        <li>Save exhibitor contacts easily</li>
-        <li>Post-event: revisit stall listings anytime</li>
-      </ul>
-      <button class="serve-cta" style="color:var(--green)" onclick="openModal('attend')">Get Tickets →</button>
-    </div>
-  </div>
-</section>
-
-<!-- EXPO LISTING -->
-<section class="wrap" id="expos">
-  <div class="stag rv">Discover</div>
-  <div class="stitle rv">Expos Across India</div>
-  <div class="filter-row rv">
-    <button class="ftab on" onclick="filterTab(this,'all')">All</button>
-    <button class="ftab" onclick="filterTab(this,'live')">🟢 Live Now</button>
-    <button class="ftab" onclick="filterTab(this,'upcoming')">Upcoming</button>
-    <button class="ftab" onclick="filterTab(this,'past')">Past</button>
-  </div>
-  <div class="expo-grid" id="expo-grid"></div>
-</section>
-
-<!-- STALL DIRECTORY -->
-<section class="wrap dir-bg" id="stalls">
-  <div class="stag rv">Permanent Directory</div>
-  <div class="stitle rv">Find Any Stall, Anytime</div>
-  <p class="ssub rv">Every stall registered on ExpoConnect stays searchable forever — even after the expo ends.</p>
-  <div class="dir-search rv">
-    <input class="dir-input" id="stall-q" type="text" placeholder="🔍  Search stall name, product or expo…" oninput="renderStalls()">
-    <select class="dir-input" id="stall-cat" style="flex:0 0 200px" onchange="renderStalls()">
-      <option value="">All Categories</option>
-      <option>Electronics</option>
-      <option>Fashion &amp; Lifestyle</option>
-      <option>Food &amp; Beverages</option>
-      <option>Health &amp; Wellness</option>
-      <option>Real Estate</option>
-      <option>Automobiles</option>
-      <option>Agriculture</option>
-      <option>Education</option>
-      <option>Technology</option>
-    </select>
-  </div>
-  <div class="stall-grid" id="stall-grid"></div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="wrap" id="how" style="text-align:center;">
-  <div class="stag rv">Simple Process</div>
-  <div class="stitle rv">How ExpoConnect Works</div>
-  <div class="steps">
-    <div class="step rv"><div class="step-n">1</div><h4>Organizer Lists Expo</h4><p>Create your expo page with venue, dates, categories and stall layout. Set ticket prices or keep it free.</p></div>
-    <div class="step rv"><div class="step-n">2</div><h4>Exhibitors Book Stalls</h4><p>Businesses browse slots, book online, and upload products and contact details instantly.</p></div>
-    <div class="step rv"><div class="step-n">3</div><h4>Attendees Get Tickets</h4><p>Visitors discover the expo, pre-browse all exhibitors and book their tickets — free or paid.</p></div>
-    <div class="step rv"><div class="step-n">4</div><h4>Expo Goes Live</h4><p>Everyone connects at the event. The stall directory is visible to all visitors in real time.</p></div>
-    <div class="step rv"><div class="step-n">5</div><h4>Permanent Archive</h4><p>After the expo, all stall pages remain live. Customers can still find exhibitors and get in touch.</p></div>
-  </div>
-</section>
-
-<!-- PRICING -->
-<section class="wrap pricing-bg" id="pricing" style="text-align:center;">
-  <div class="stag rv">Stall Packages</div>
-  <div class="stitle rv">Book Your Space</div>
-  <p class="ssub rv" style="margin:0 auto 0;">Pricing is set by the event organizer — packages vary per expo. Below are typical ranges.</p>
-  <div class="pricing-grid rv">
-    <div class="pc">
-      <div class="pc-type">Basic Stall</div>
-      <div class="pc-price">₹4,999 <span>/ expo</span></div>
-      <div class="pc-desc">Perfect for small businesses &amp; solo exhibitors</div>
-      <ul class="pc-feats">
-        <li>3m × 3m stall space</li>
-        <li>Digital stall page on ExpoConnect</li>
-        <li>Product listing (up to 10 items)</li>
-        <li>Contact info &amp; WhatsApp link</li>
-        <li>Post-event archive listing</li>
-      </ul>
-      <button class="pc-btn" onclick="openModal('stall')">Book Basic Stall</button>
-    </div>
-    <div class="pc feat">
-      <div class="pc-type">Premium Stall</div>
-      <div class="pc-price">₹12,999 <span>/ expo</span></div>
-      <div class="pc-desc">For brands wanting maximum visibility</div>
-      <ul class="pc-feats">
-        <li>6m × 4m prime location stall</li>
-        <li>Featured in expo directory</li>
-        <li>Unlimited product listings</li>
-        <li>Photo gallery &amp; brochure upload</li>
-        <li>Lead capture form for visitors</li>
-        <li>Priority in search results</li>
-        <li>Permanent post-event archive</li>
-      </ul>
-      <button class="pc-btn" onclick="openModal('stall')">Book Premium Stall</button>
-    </div>
-    <div class="pc">
-      <div class="pc-type">Organizer Plan</div>
-      <div class="pc-price">₹2,999 <span>/ event</span></div>
-      <div class="pc-desc">Everything to run your expo end-to-end</div>
-      <ul class="pc-feats">
-        <li>Full expo listing page</li>
-        <li>Unlimited stall management</li>
-        <li>Ticket sales (free + paid)</li>
-        <li>Attendee check-in tools</li>
-        <li>Revenue &amp; analytics dashboard</li>
-        <li>Permanent event archive</li>
-      </ul>
-      <button class="pc-btn" onclick="openModal('organizer')">List Your Expo</button>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="fg-grid">
-    <div class="fb">
-      <div class="logo">Expo<em style="color:var(--accent)">Connect</em><small style="font-size:.48rem;color:var(--muted);letter-spacing:1px;margin-left:3px;vertical-align:middle;">.ai.in</small></div>
-      <p>India's platform connecting expo organizers, stall owners and attendees — before, during, and after every event.</p>
-    </div>
-    <div class="fc"><h6>Platform</h6><ul>
-      <li><a href="#expos">Browse Expos</a></li>
+  <!-- ── NAV ── -->
+  <nav>
+    <div class="logo">Expo<em>Connect</em><small>.ai.in</small></div>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="#expos">Expos</a></li>
       <li><a href="#stalls">Stall Directory</a></li>
-      <li><a href="#pricing">Pricing</a></li>
-      <li><a href="#how">How It Works</a></li>
-    </ul></div>
-    <div class="fc"><h6>For Organizers</h6><ul>
-      <li><a href="#" onclick="openModal('organizer');return false">List an Expo</a></li>
-      <li><a href="#">Organizer Dashboard</a></li>
-      <li><a href="#">Ticket Management</a></li>
-      <li><a href="#">Analytics</a></li>
-    </ul></div>
-    <div class="fc"><h6>Support</h6><ul>
-      <li><a href="#">Help Center</a></li>
-      <li><a href="#">Contact Us</a></li>
-      <li><a href="#">Privacy Policy</a></li>
-      <li><a href="#">Terms of Use</a></li>
-    </ul></div>
-  </div>
-  <div class="fb-bot">
-    <p>© 2025 ExpoConnect.ai.in — All rights reserved.</p>
-    <span>Made with ♥ in India 🇮🇳</span>
-  </div>
-</footer>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <a class="nav-cta" href="organizer-register.html">List Your Expo</a>
+    <button class="nav-mobile-btn">☰</button>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-eyebrow">🇮🇳 India's Expo Connection Platform</div>
+    <h1 class="hero-title">Every <span class="hi">Expo</span>.<br>Every <span class="city">City</span>.</h1>
+    <p class="hero-sub">Discover expos near you, book stalls, grab tickets — and find every exhibitor long after the event wraps up.</p>
+    <div class="hero-btns">
+      <a class="btn-primary" href="#expos">Explore Expos</a>
+      <a class="btn-ghost"   href="#stalls">Browse Stall Directory</a>
+    </div>
+    <div class="hero-badges">
+      <span class="hbadge">🏛️ For Organizers</span>
+      <span class="hbadge">🎪 For Stall Owners</span>
+      <span class="hbadge">🎟️ For Attendees</span>
+      <span class="hbadge">📦 Permanent Archive</span>
+    </div>
+  </section>
+
+  <!-- ── WHO WE SERVE ── -->
+  <section class="wrap serve-bg" id="serve">
+    <div class="stag rv">Who It's For</div>
+    <div class="stitle rv">Three Pillars of Every Expo</div>
+    <div class="serve-grid rv">
+
+      <div class="serve-card" style="--card-line:var(--accent);--icon-bg:rgba(232,87,42,.12);">
+        <div class="serve-icon">🏛️</div>
+        <h3>Organizers</h3>
+        <p>Create &amp; manage your expo. Sell stall slots, issue tickets, and keep your event discoverable forever.</p>
+        <ul class="serve-list">
+          <li>Create expo listing with venue &amp; schedule</li>
+          <li>Sell stall slots with custom pricing</li>
+          <li>Issue free or paid attendee tickets</li>
+          <li>Bookings, revenue &amp; analytics dashboard</li>
+          <li>Permanent event archive page</li>
+        </ul>
+        <a class="serve-cta" href="organizer-register.html">Register as Organizer →</a>
+      </div>
+
+      <div class="serve-card" style="--card-line:var(--blue);--icon-bg:rgba(91,143,255,.12);">
+        <div class="serve-icon">🎪</div>
+        <h3>Stall Owners</h3>
+        <p>Book your space and get a permanent digital presence — before, during, and long after the event ends.</p>
+        <ul class="serve-list">
+          <li>Browse &amp; book available stall slots</li>
+          <li>Upload products, photos &amp; contact info</li>
+          <li>Stall page stays live after the event</li>
+          <li>Customers find you via stall directory</li>
+          <li>Receive leads &amp; enquiries from visitors</li>
+        </ul>
+        <a class="serve-cta" href="exhibitor-register.html" style="color:var(--blue)">Book a Stall →</a>
+      </div>
+
+      <div class="serve-card" style="--card-line:var(--green);--icon-bg:rgba(0,201,122,.12);">
+        <div class="serve-icon">🎟️</div>
+        <h3>Attendees</h3>
+        <p>Discover expos near you, get your ticket, and pre-browse every exhibitor before you even arrive.</p>
+        <ul class="serve-list">
+          <li>Find expos by city, category &amp; date</li>
+          <li>Free or paid ticket booking</li>
+          <li>Pre-browse all stalls &amp; products</li>
+          <li>Save exhibitor contacts easily</li>
+          <li>Post-event: revisit stall listings anytime</li>
+        </ul>
+        <a class="serve-cta" href="visitor-register.html" style="color:var(--green)">Get Tickets →</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── EXPO LISTING ── -->
+  <section class="wrap" id="expos">
+    <div class="stag rv">Discover</div>
+    <div class="stitle rv">Expos Across India</div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:36px 0 24px;" class="rv">
+      <button class="btn-sm" id="ftab-all"      onclick="filterExpos('all',this)"      style="background:var(--accent)">All</button>
+      <button class="btn-sm" id="ftab-live"     onclick="filterExpos('live',this)"     style="background:transparent;border:1px solid var(--border);color:var(--muted)">🟢 Live</button>
+      <button class="btn-sm" id="ftab-upcoming" onclick="filterExpos('upcoming',this)" style="background:transparent;border:1px solid var(--border);color:var(--muted)">Upcoming</button>
+      <button class="btn-sm" id="ftab-past"     onclick="filterExpos('past',this)"     style="background:transparent;border:1px solid var(--border);color:var(--muted)">Past</button>
+    </div>
+
+    <div id="expo-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;"></div>
+  </section>
+
+  <!-- ── STALL DIRECTORY ── -->
+  <section class="wrap" id="stalls" style="background:linear-gradient(180deg,var(--bg) 0%,var(--surface) 20%,var(--surface) 80%,var(--bg) 100%)">
+    <div class="stag rv">Permanent Directory</div>
+    <div class="stitle rv">Find Any Stall, Anytime</div>
+    <p class="ssub rv">Every stall registered on ExpoConnect stays searchable forever — even after the expo ends.</p>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin:36px 0 28px;" class="rv">
+      <input id="stall-q" type="text" placeholder="🔍  Search stall, product or expo…"
+        style="flex:1;min-width:220px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:11px 16px;color:var(--text);font-family:var(--font-body);font-size:.88rem;outline:none;"
+        oninput="renderStalls()">
+      <select id="stall-cat" onchange="renderStalls()"
+        style="flex:0 0 190px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:11px 16px;color:var(--text);font-family:var(--font-body);font-size:.88rem;outline:none;">
+        <option value="">All Categories</option>
+        <option>Electronics</option><option>Fashion &amp; Lifestyle</option>
+        <option>Food &amp; Beverages</option><option>Health &amp; Wellness</option>
+        <option>Real Estate</option><option>Automobiles</option>
+        <option>Agriculture</option><option>Education</option><option>Technology</option>
+      </select>
+    </div>
+
+    <div id="stall-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;"></div>
+  </section>
+
+  <!-- ── HOW IT WORKS ── -->
+  <section class="wrap" id="how" style="text-align:center;">
+    <div class="stag rv">Simple Process</div>
+    <div class="stitle rv">How ExpoConnect Works</div>
+    <div class="steps">
+      <div class="step rv"><div class="step-n">1</div><h4>Organizer Lists Expo</h4><p>Create your expo page with venue, dates and stall layout. Set ticket prices or keep it free.</p></div>
+      <div class="step rv"><div class="step-n">2</div><h4>Exhibitors Book Stalls</h4><p>Businesses browse slots, book online and upload products and contact details.</p></div>
+      <div class="step rv"><div class="step-n">3</div><h4>Attendees Get Tickets</h4><p>Visitors discover the expo, pre-browse all exhibitors and book free or paid tickets.</p></div>
+      <div class="step rv"><div class="step-n">4</div><h4>Expo Goes Live</h4><p>Everyone connects at the event. The stall directory is live for all visitors.</p></div>
+      <div class="step rv"><div class="step-n">5</div><h4>Permanent Archive</h4><p>After the expo, all stall pages stay live. Customers still find exhibitors anytime.</p></div>
+    </div>
+  </section>
+
+  <!-- ── PRICING ── -->
+  <section class="wrap" id="pricing" style="text-align:center;background:linear-gradient(180deg,var(--bg) 0%,#0c0b1a 50%,var(--bg) 100%)">
+    <div class="stag rv">Packages</div>
+    <div class="stitle rv">Stall &amp; Organizer Plans</div>
+    <p class="ssub rv" style="margin:0 auto 0">Pricing is set by the organizer. Below are typical ranges.</p>
+    <div class="pricing-grid rv">
+      <div class="pc">
+        <div class="pc-type">Basic Stall</div>
+        <div class="pc-price">₹4,999 <span>/ expo</span></div>
+        <div class="pc-desc">For small businesses &amp; solo exhibitors</div>
+        <ul class="pc-feats">
+          <li>3m × 3m stall space</li>
+          <li>Digital stall page on ExpoConnect</li>
+          <li>Up to 10 product listings</li>
+          <li>Contact info &amp; WhatsApp link</li>
+          <li>Post-event archive listing</li>
+        </ul>
+        <a href="exhibitor-register.html" class="pc-btn">Book Basic Stall</a>
+      </div>
+      <div class="pc feat">
+        <div class="pc-type">Premium Stall</div>
+        <div class="pc-price">₹12,999 <span>/ expo</span></div>
+        <div class="pc-desc">For brands wanting maximum visibility</div>
+        <ul class="pc-feats">
+          <li>6m × 4m prime location stall</li>
+          <li>Featured in expo directory</li>
+          <li>Unlimited product listings</li>
+          <li>Photo gallery &amp; brochure upload</li>
+          <li>Lead capture form for visitors</li>
+          <li>Priority in search results</li>
+          <li>Permanent post-event archive</li>
+        </ul>
+        <a href="exhibitor-register.html" class="pc-btn">Book Premium Stall</a>
+      </div>
+      <div class="pc">
+        <div class="pc-type">Organizer Plan</div>
+        <div class="pc-price">₹2,999 <span>/ event</span></div>
+        <div class="pc-desc">Everything to run your expo end-to-end</div>
+        <ul class="pc-feats">
+          <li>Full expo listing page</li>
+          <li>Unlimited stall management</li>
+          <li>Free + paid ticket sales</li>
+          <li>Attendee check-in tools</li>
+          <li>Revenue &amp; analytics dashboard</li>
+          <li>Permanent event archive</li>
+        </ul>
+        <a href="organizer-register.html" class="pc-btn">List Your Expo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">Expo<em>Connect</em><small>.ai.in</small></div>
+        <p>India's platform connecting expo organizers, stall owners and attendees — before, during, and after every event.</p>
+      </div>
+      <div class="footer-col"><h6>Platform</h6><ul>
+        <li><a href="#expos">Browse Expos</a></li>
+        <li><a href="#stalls">Stall Directory</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#how">How It Works</a></li>
+      </ul></div>
+      <div class="footer-col"><h6>Register</h6><ul>
+        <li><a href="organizer-register.html">As Organizer</a></li>
+        <li><a href="exhibitor-register.html">Book a Stall</a></li>
+        <li><a href="visitor-register.html">Get Tickets</a></li>
+      </ul></div>
+      <div class="footer-col"><h6>Company</h6><ul>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Use</a></li>
+        <li><a href="admin-login.html">Admin</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 ExpoConnect.ai.in — All rights reserved.</p>
+      <span>Made with <span class="heart">♥</span> in India 🇮🇳</span>
+    </div>
+  </footer>
 
 </div><!-- /shell -->
-
-<!-- MODALS -->
-<div class="overlay" id="m-organizer">
-  <div class="modal">
-    <div class="mhead"><h3>🏛️ List Your Expo</h3><button class="mclose" onclick="closeModal('organizer')">✕</button></div>
-    <div id="of-form">
-      <div class="fg"><label>Expo Name</label><input type="text" placeholder="e.g. Bengaluru Tech Expo 2025"></div>
-      <div class="frow">
-        <div class="fg"><label>City</label><input type="text" placeholder="City name"></div>
-        <div class="fg"><label>Category</label><select><option>Technology</option><option>Fashion</option><option>Food &amp; Beverage</option><option>Health</option><option>Real Estate</option><option>Agriculture</option><option>Education</option><option>Automobiles</option><option>Other</option></select></div>
-      </div>
-      <div class="frow">
-        <div class="fg"><label>Start Date</label><input type="date"></div>
-        <div class="fg"><label>End Date</label><input type="date"></div>
-      </div>
-      <div class="fg"><label>Venue / Address</label><input type="text" placeholder="Hall name, full address"></div>
-      <div class="frow">
-        <div class="fg"><label>Attendee Ticket Price (₹0 = Free)</label><input type="number" placeholder="0"></div>
-        <div class="fg"><label>Total Stall Slots</label><input type="number" placeholder="e.g. 50"></div>
-      </div>
-      <div class="fg"><label>Your Name / Organisation</label><input type="text" placeholder="Organizer name"></div>
-      <div class="fg"><label>Phone / WhatsApp</label><input type="tel" placeholder="+91 XXXXX XXXXX"></div>
-      <div class="fg"><label>Brief Description</label><textarea placeholder="Tell exhibitors &amp; attendees about your expo…"></textarea></div>
-      <button class="msubmit" onclick="submitForm('of','organizer')">Submit Expo Listing →</button>
-    </div>
-    <div class="msuccess" id="of-success"><div class="ms-icon">🎉</div><h4>Expo Listed!</h4><p>Our team will review and publish your expo within 24 hours.</p></div>
-  </div>
-</div>
-
-<div class="overlay" id="m-stall">
-  <div class="modal">
-    <div class="mhead"><h3>🎪 Book a Stall</h3><button class="mclose" onclick="closeModal('stall')">✕</button></div>
-    <div id="sf-form">
-      <div class="fg"><label>Business / Brand Name</label><input type="text" placeholder="Your brand name"></div>
-      <div class="fg"><label>Select Expo</label><select id="stall-expo-select"><option value="">— Expos will appear here once added —</option></select></div>
-      <div class="fg"><label>Stall Type</label><select><option>Basic — ₹4,999 (3m×3m)</option><option>Premium — ₹12,999 (6m×4m, Prime Location)</option></select></div>
-      <div class="fg"><label>Products / Services (comma separated)</label><input type="text" placeholder="e.g. Smartwatches, IoT Devices, Accessories"></div>
-      <div class="frow">
-        <div class="fg"><label>Contact Name</label><input type="text" placeholder="Your name"></div>
-        <div class="fg"><label>Phone / WhatsApp</label><input type="tel" placeholder="+91 XXXXX XXXXX"></div>
-      </div>
-      <div class="fg"><label>Email</label><input type="email" placeholder="you@company.com"></div>
-      <div class="fg"><label>Short Business Description</label><textarea placeholder="Tell visitors what you offer…"></textarea></div>
-      <button class="msubmit" onclick="submitForm('sf','stall')">Book Stall &amp; Pay →</button>
-    </div>
-    <div class="msuccess" id="sf-success"><div class="ms-icon">✅</div><h4>Booking Request Sent!</h4><p>The organizer will confirm your stall. Your page goes live once confirmed.</p></div>
-  </div>
-</div>
-
-<div class="overlay" id="m-attend">
-  <div class="modal">
-    <div class="mhead"><h3>🎟️ Get Your Ticket</h3><button class="mclose" onclick="closeModal('attend')">✕</button></div>
-    <div id="af-form">
-      <div class="fg"><label>Select Expo</label><select id="attend-expo-select"><option value="">— Expos will appear here once added —</option></select></div>
-      <div class="frow">
-        <div class="fg"><label>Your Name</label><input type="text" placeholder="Full name"></div>
-        <div class="fg"><label>No. of Tickets</label><input type="number" value="1" min="1" max="10"></div>
-      </div>
-      <div class="fg"><label>Phone / WhatsApp</label><input type="tel" placeholder="+91 XXXXX XXXXX"></div>
-      <div class="fg"><label>Email (ticket sent here)</label><input type="email" placeholder="you@email.com"></div>
-      <button class="msubmit" onclick="submitForm('af','attend')">Confirm Registration →</button>
-    </div>
-    <div class="msuccess" id="af-success"><div class="ms-icon">🎫</div><h4>You're Registered!</h4><p>Your ticket has been sent to your phone and email. See you at the expo!</p></div>
-  </div>
-</div>
-
 <div id="toast"></div>
 
-<!-- ═══════════════════════════════════════════════════════════════
-     DATA CONFIG
-     Replace EXPOS and STALLS with fetch() calls to your API.
-
-     EXPO object shape:
-     {
-       id:          number,
-       name:        string,
-       city:        string,
-       dateRange:   string,          e.g. 'Jun 14–16, 2025'
-       category:    string,
-       emoji:       string,
-       status:      'live'|'upcoming'|'past',
-       ticketPrice: number,          0 = free
-       totalStalls: number,
-       thumbGrad:   string           CSS gradient, e.g. 'linear-gradient(135deg,#0f2027,#2c5364)'
-     }
-
-     STALL object shape:
-     {
-       id:       number,
-       name:     string,
-       expoName: string,
-       category: string,
-       products: string[],
-       phone:    string,
-       emoji:    string,
-       iconBg:   string              CSS color, e.g. 'rgba(91,143,255,0.18)'
-     }
-═══════════════════════════════════════════════════════════════ -->
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/bg3d.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/app.js"></script>
 <script>
-// ── SWAP THESE WITH YOUR API CALLS ───────────────────────────
-// Example: const EXPOS = await fetch('/api/expos').then(r=>r.json())
-const EXPOS  = [];   // <-- your backend fills this
-const STALLS = [];   // <-- your backend fills this
-// ─────────────────────────────────────────────────────────────
+  initBG();
 
-let activeFilter = 'all';
+  /* ═══════════════════════════════════════════
+     DATA — filled from Supabase when ready
+     EXPOS and STALLS will be fetched below.
+     Shape docs are in supabase.js
+     ═══════════════════════════════════════════ */
+  let EXPOS  = [];
+  let STALLS = [];
+  let activeFilter = 'all';
 
-function renderExpos() {
-  const grid = document.getElementById('expo-grid');
-  const list = activeFilter === 'all' ? EXPOS : EXPOS.filter(e => e.status === activeFilter);
-
-  if (!list.length) {
-    const labels = {all:'No expos listed yet', live:'No live expos right now', upcoming:'No upcoming expos yet', past:'No past expos yet'};
-    grid.innerHTML = `<div class="empty-state">
-      <div class="es-icon">📭</div>
-      <strong>${labels[activeFilter]||'Nothing here yet'}</strong>
-      <p>Expos will appear here once organizers add them.</p>
-    </div>`;
-    return;
+  async function loadData() {
+    try {
+      const [exRes, stRes] = await Promise.all([
+        Expos.getAll(),
+        Stalls.getAll(),
+      ]);
+      EXPOS  = exRes.data  || [];
+      STALLS = stRes.data  || [];
+    } catch(e) {
+      // Supabase not configured yet — arrays stay empty, placeholders show
+    }
+    renderExpos();
+    renderStalls();
   }
 
-  grid.innerHTML = list.map(e => `
-    <div class="expo-card">
-      <div class="expo-thumb" style="background:${e.thumbGrad||'linear-gradient(135deg,#111,#1a1a2e)'}">
-        <span>${e.emoji||'🎪'}</span>
-        <div class="thumb-city">📍 ${e.city}</div>
-        <div class="thumb-status ${e.status==='live'?'s-live':e.status==='upcoming'?'s-upcoming':'s-past'}">
-          ${e.status==='live'?'🟢 LIVE':e.status==='upcoming'?'Upcoming':'Concluded'}
+  function renderExpos() {
+    const grid = document.getElementById('expo-grid');
+    const list = activeFilter === 'all' ? EXPOS : EXPOS.filter(e => e.status === activeFilter);
+
+    if (!list.length) {
+      grid.innerHTML = `<div class="empty-state">
+        <div class="es-icon">📭</div>
+        <strong>No expos here yet</strong>
+        <p>Organizers will list expos here once they register.</p>
+      </div>`;
+      return;
+    }
+
+    grid.innerHTML = list.map(e => `
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .22s,border-color .22s;cursor:pointer;"
+           onmouseenter="this.style.transform='translateY(-5px)';this.style.borderColor='var(--border-h)'"
+           onmouseleave="this.style.transform='';this.style.borderColor='var(--border)'">
+        <div style="height:150px;display:flex;align-items:center;justify-content:center;font-size:2.6rem;position:relative;background:${e.thumb_grad||'linear-gradient(135deg,#111,#1a1a2e)'}">
+          ${e.emoji||'🎪'}
+          <span style="position:absolute;top:10px;left:10px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);padding:3px 11px;border-radius:100px;font-size:.7rem;font-weight:600;">📍 ${e.city}</span>
+          <span class="tag ${e.status}" style="position:absolute;top:10px;right:10px;">
+            ${e.status==='live'?'🟢 LIVE':e.status==='upcoming'?'Upcoming':'Concluded'}
+          </span>
         </div>
-      </div>
-      <div class="expo-body">
-        <h4>${e.name}</h4>
-        <div class="expo-meta">
-          <span>📅 ${e.dateRange}</span>
-          <span>🏷 ${e.category}</span>
-          <span>🎪 ${e.totalStalls} stalls</span>
-        </div>
-        <div class="expo-foot">
-          <div class="ep-price ${e.ticketPrice===0?'free':'paid'}">
-            ${e.ticketPrice===0?'FREE ENTRY':'₹'+e.ticketPrice}
+        <div style="padding:18px 18px 14px;">
+          <h4 style="font-family:var(--font-head);font-weight:600;font-size:.98rem;margin-bottom:6px;">${e.name}</h4>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;font-size:.73rem;color:var(--muted);margin-bottom:12px;">
+            <span>📅 ${e.start_date ? new Date(e.start_date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : '—'}</span>
+            <span>🏷 ${e.category||''}</span>
+            <span>🎪 ${e.total_stalls||0} stalls</span>
           </div>
-          <button class="ep-btn" onclick="openModal('${e.status==='past'?'stall':'attend'}')">
-            ${e.status==='past'?'Browse Stalls':'Get Ticket'}
-          </button>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border);">
+            <span class="${e.ticket_price===0?'tag free':'tag paid'}">${e.ticket_price===0?'FREE ENTRY':'₹'+e.ticket_price}</span>
+            <a href="${e.status==='past'?'exhibitor-register.html':'visitor-register.html'}?expo=${e.id}" class="btn-sm">
+              ${e.status==='past'?'Browse Stalls':'Get Ticket'}
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-  `).join('');
-}
-
-function renderStalls() {
-  const q   = (document.getElementById('stall-q').value||'').toLowerCase();
-  const cat = (document.getElementById('stall-cat').value||'').toLowerCase();
-  const grid = document.getElementById('stall-grid');
-
-  if (!STALLS.length) {
-    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
-      <div class="es-icon">🏪</div>
-      <strong>No stalls registered yet</strong>
-      <p>Stall profiles will appear here once exhibitors book their spaces.</p>
-    </div>`;
-    return;
+    `).join('');
   }
 
-  const list = STALLS.filter(s => {
-    const mQ = !q || s.name.toLowerCase().includes(q) || (s.expoName||'').toLowerCase().includes(q) || (s.products||[]).some(p=>p.toLowerCase().includes(q));
-    const mC = !cat || (s.category||'').toLowerCase().includes(cat);
-    return mQ && mC;
-  });
+  function renderStalls() {
+    const q   = (document.getElementById('stall-q')?.value||'').toLowerCase();
+    const cat = (document.getElementById('stall-cat')?.value||'').toLowerCase();
+    const grid = document.getElementById('stall-grid');
 
-  if (!list.length) {
-    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
-      <div class="es-icon">🔍</div><strong>No results</strong><p>Try a different search term or category.</p>
-    </div>`;
-    return;
-  }
+    if (!STALLS.length) {
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+        <div class="es-icon">🏪</div>
+        <strong>No stalls registered yet</strong>
+        <p>Exhibitor profiles will appear here once stalls are booked.</p>
+      </div>`;
+      return;
+    }
 
-  grid.innerHTML = list.map(s => `
-    <div class="stall-card">
-      <div class="sc-head">
-        <div class="sc-icon" style="background:${s.iconBg||'rgba(91,143,255,.15)'}">${s.emoji||'🏪'}</div>
-        <div class="sc-info"><h5>${s.name}</h5><div class="sc-expo">@ ${s.expoName}</div></div>
-      </div>
-      <div class="sc-tags">${(s.products||[]).map(p=>`<span class="sc-tag">${p}</span>`).join('')}</div>
-      <div class="sc-foot">
-        <div class="sc-phone">📞 ${s.phone}</div>
-        <button class="sc-view" onclick="showToast('Opening profile for ${s.name}…')">View Profile →</button>
-      </div>
-    </div>
-  `).join('');
-}
-
-function populateExpoSelects() {
-  ['stall-expo-select','attend-expo-select'].forEach(id => {
-    const el = document.getElementById(id);
-    if (!EXPOS.length) { el.innerHTML='<option>— Expos will appear here once added —</option>'; return; }
-    el.innerHTML = '<option value="">— Select an expo —</option>' +
-      EXPOS.map(e=>`<option value="${e.id}">${e.name}${e.status==='past'?' (Past)':''}</option>`).join('');
-  });
-}
-
-function filterTab(el, f) {
-  document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('on'));
-  el.classList.add('on');
-  activeFilter = f;
-  renderExpos();
-}
-
-function openModal(type) { document.getElementById('m-'+type).classList.add('open'); document.body.style.overflow='hidden'; }
-function closeModal(type) { document.getElementById('m-'+type).classList.remove('open'); document.body.style.overflow=''; }
-document.querySelectorAll('.overlay').forEach(o=>{
-  o.addEventListener('click', e=>{ if(e.target===o){ o.classList.remove('open'); document.body.style.overflow=''; }});
-});
-
-function submitForm(prefix, modalKey) {
-  document.getElementById(prefix+'-form').style.display = 'none';
-  document.getElementById(prefix+'-success').style.display = 'block';
-  showToast('✅ Submitted!','ok');
-  setTimeout(()=>{
-    closeModal(modalKey);
-    setTimeout(()=>{
-      document.getElementById(prefix+'-form').style.display = '';
-      document.getElementById(prefix+'-success').style.display = 'none';
-    }, 400);
-  }, 3000);
-}
-
-function showToast(msg, type='') {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.className = 'show '+(type||'');
-  clearTimeout(t._t); t._t = setTimeout(()=>t.className='', 3200);
-}
-
-// Scroll reveal
-const rv = new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');});},{threshold:.1});
-document.querySelectorAll('.rv').forEach(el=>rv.observe(el));
-
-renderExpos(); renderStalls(); populateExpoSelects();
-</script>
-
-<!-- THREE.JS 3D BACKGROUND -->
-<script>
-(function(){
-  const canvas = document.getElementById('three-canvas');
-  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-  renderer.setClearColor(0x000000, 0);
-
-  const scene  = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 200);
-  camera.position.set(0, 0, 28);
-
-  function resize(){
-    const w=window.innerWidth, h=window.innerHeight;
-    renderer.setSize(w,h);
-    camera.aspect=w/h;
-    camera.updateProjectionMatrix();
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  // Lights
-  scene.add(new THREE.AmbientLight(0xffffff, 0.35));
-  const dL = new THREE.DirectionalLight(0xff6633, 1.1);
-  dL.position.set(10,10,10); scene.add(dL);
-  const bL = new THREE.DirectionalLight(0x4466ff, 0.7);
-  bL.position.set(-10,-5,5); scene.add(bL);
-
-  // Particles
-  const N = 800;
-  const pos = new Float32Array(N*3);
-  const col = new Float32Array(N*3);
-  const pal = [
-    new THREE.Color(0xe8572a), new THREE.Color(0x5b8fff),
-    new THREE.Color(0x00c97a), new THREE.Color(0xf0a500)
-  ];
-  for(let i=0;i<N;i++){
-    pos[i*3]=(Math.random()-.5)*100; pos[i*3+1]=(Math.random()-.5)*100; pos[i*3+2]=(Math.random()-.5)*60;
-    const c=pal[i%pal.length]; col[i*3]=c.r; col[i*3+1]=c.g; col[i*3+2]=c.b;
-  }
-  const pGeo = new THREE.BufferGeometry();
-  pGeo.setAttribute('position', new THREE.BufferAttribute(pos,3));
-  pGeo.setAttribute('color',    new THREE.BufferAttribute(col,3));
-  const pMat = new THREE.PointsMaterial({size:.16,vertexColors:true,transparent:true,opacity:.55,sizeAttenuation:true});
-  scene.add(new THREE.Points(pGeo, pMat));
-
-  // Torus rings
-  const rings=[];
-  [[6,0xe8572a],[10,0x5b8fff],[14,0x00c97a]].forEach(([r,c],i)=>{
-    const g=new THREE.TorusGeometry(r,.035,8,90);
-    const m=new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:.15-i*.03});
-    const mesh=new THREE.Mesh(g,m);
-    mesh.rotation.set(Math.random()*Math.PI,Math.random()*Math.PI,0);
-    mesh.position.set((Math.random()-.5)*14,(Math.random()-.5)*10,0);
-    rings.push(mesh); scene.add(mesh);
-  });
-
-  // Floating icosahedra
-  const icos=[];
-  for(let i=0;i<9;i++){
-    const sz=.35+Math.random()*.85;
-    const g=new THREE.IcosahedronGeometry(sz,0);
-    const m=new THREE.MeshPhongMaterial({color:pal[i%4],transparent:true,opacity:.2,wireframe:i%2===0});
-    const mesh=new THREE.Mesh(g,m);
-    mesh.position.set((Math.random()-.5)*44,(Math.random()-.5)*34,(Math.random()-.5)*12);
-    mesh.userData={
-      ax:new THREE.Vector3(Math.random(),Math.random(),Math.random()).normalize(),
-      sp:.003+Math.random()*.005,
-      baseY:mesh.position.y,
-      amp:.08+Math.random()*.12,
-      freq:.3+Math.random()*.5,
-      ph:Math.random()*Math.PI*2
-    };
-    icos.push(mesh); scene.add(mesh);
-  }
-
-  // Big wire octahedron backdrop
-  const bgM=new THREE.Mesh(
-    new THREE.OctahedronGeometry(16,0),
-    new THREE.MeshBasicMaterial({color:0x5b8fff,wireframe:true,transparent:true,opacity:.025})
-  );
-  scene.add(bgM);
-
-  // Mouse parallax
-  const mouse={x:0,y:0};
-  window.addEventListener('mousemove',e=>{
-    mouse.x=(e.clientX/window.innerWidth-.5)*2;
-    mouse.y=(e.clientY/window.innerHeight-.5)*2;
-  });
-
-  let t=0;
-  (function loop(){
-    requestAnimationFrame(loop);
-    t+=.011;
-
-    // particles slow drift
-    scene.children[0].rotation && (()=>{})(); // no-op placeholder
-    pGeo.attributes.position.array; // already set
-    // rotate whole particle system via the Points object (first Points we added)
-    scene.traverse(obj=>{if(obj.isPoints){obj.rotation.y=t*.035;obj.rotation.x=t*.018;}});
-
-    rings.forEach((r,i)=>{r.rotation.x+=.0009*(i+1);r.rotation.z+=.0006*(i+1);});
-
-    icos.forEach(m=>{
-      m.rotateOnAxis(m.userData.ax, m.userData.sp);
-      m.position.y=m.userData.baseY+Math.sin(t*m.userData.freq+m.userData.ph)*m.userData.amp*5;
+    const list = STALLS.filter(s => {
+      const products = Array.isArray(s.products) ? s.products : (s.products||'').split(',');
+      const mQ = !q || s.business_name?.toLowerCase().includes(q)
+        || (s.expo_name||'').toLowerCase().includes(q)
+        || products.some(p=>p.toLowerCase().includes(q));
+      const mC = !cat || (s.category||'').toLowerCase().includes(cat);
+      return mQ && mC;
     });
 
-    bgM.rotation.y=t*.025; bgM.rotation.x=t*.012;
+    if (!list.length) {
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+        <div class="es-icon">🔍</div><strong>No results</strong><p>Try a different search term.</p>
+      </div>`; return;
+    }
 
-    camera.position.x+=(mouse.x*3.5-camera.position.x)*.038;
-    camera.position.y+=(-mouse.y*2.5-camera.position.y)*.038;
-    camera.lookAt(scene.position);
+    grid.innerHTML = list.map(s => {
+      const products = Array.isArray(s.products) ? s.products : (s.products||'').split(',').filter(Boolean);
+      return `
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:20px;transition:border-color .2s,transform .2s;"
+             onmouseenter="this.style.borderColor='rgba(232,87,42,.3)';this.style.transform='translateY(-2px)'"
+             onmouseleave="this.style.borderColor='var(--border)';this.style.transform=''">
+          <div style="display:flex;align-items:center;gap:11px;margin-bottom:12px;">
+            <div style="width:40px;height:40px;border-radius:9px;background:rgba(91,143,255,.15);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">🏪</div>
+            <div>
+              <div style="font-family:var(--font-head);font-weight:600;font-size:.9rem;">${s.business_name}</div>
+              <div style="font-size:.71rem;color:var(--muted);">@ ${s.expo_name||'Expo'}</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px;">
+            ${products.map(p=>`<span class="tag">${p.trim()}</span>`).join('')}
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:.77rem;color:var(--blue);font-weight:500;">📞 ${s.phone||''}</span>
+            <button style="font-size:.74rem;color:var(--accent);font-weight:700;border:none;background:none;cursor:pointer;">View Profile →</button>
+          </div>
+        </div>`;
+    }).join('');
+  }
 
-    renderer.render(scene,camera);
-  })();
-})();
+  function filterExpos(f, btn) {
+    document.querySelectorAll('[id^="ftab-"]').forEach(b => {
+      b.style.background = 'transparent'; b.style.border = '1px solid var(--border)'; b.style.color = 'var(--muted)';
+    });
+    btn.style.background = 'var(--accent)'; btn.style.border = '1px solid var(--accent)'; btn.style.color = '#fff';
+    activeFilter = f;
+    renderExpos();
+  }
+
+  loadData();
 </script>
 </body>
 </html>

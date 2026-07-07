@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Organizer Registration — ExpoConnect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/forms.css"/>
+</head>
+<body>
+
+<canvas id="three-canvas"></canvas>
+
+<div class="shell">
+
+  <nav>
+    <div class="logo">Expo<em>Connect</em><small>.ai.in</small></div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="exhibitor-register.html">Book a Stall</a></li>
+      <li><a href="visitor-register.html">Get Tickets</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-mobile-btn">☰</button>
+  </nav>
+
+  <div class="form-page">
+    <div class="form-wrap">
+
+      <!-- Header -->
+      <div class="form-header rv">
+        <div class="form-icon" style="--icon-bg:rgba(232,87,42,.12);--icon-border:rgba(232,87,42,.2);">🏛️</div>
+        <div class="stag">Organizer Registration</div>
+        <div class="stitle">List Your Expo</div>
+        <p>Fill in your details and expo information. Our team will review and publish your expo within 24 hours.</p>
+      </div>
+
+      <!-- Step Indicator -->
+      <div class="step-indicator rv">
+        <div class="si-step active" data-step="0">
+          <div class="si-dot">1</div>
+          <div class="si-label">Your Details</div>
+        </div>
+        <div class="si-line"></div>
+        <div class="si-step" data-step="1">
+          <div class="si-dot">2</div>
+          <div class="si-label">Expo Info</div>
+        </div>
+        <div class="si-line"></div>
+        <div class="si-step" data-step="2">
+          <div class="si-dot">3</div>
+          <div class="si-label">Stalls &amp; Tickets</div>
+        </div>
+      </div>
+
+      <!-- Form Card -->
+      <div class="form-card rv">
+
+        <!-- SUCCESS -->
+        <div class="form-success" id="form-success">
+          <div class="fs-icon">🎉</div>
+          <h3>Expo Submitted!</h3>
+          <p>Our team will review and publish your expo listing within 24 hours. You'll receive a confirmation on your registered phone and email.</p>
+          <div class="ref-id">—</div>
+          <a href="index.html" class="btn-primary" style="display:inline-block;margin-top:8px;">Back to Home</a>
+        </div>
+
+        <!-- FORM -->
+        <form id="organizer-form" novalidate>
+
+          <!-- ── STEP 1: Your Details ── -->
+          <div class="step-panel active" data-step="0">
+            <div class="form-divider"><span>Personal Info</span></div>
+
+            <div class="frow">
+              <div class="fg">
+                <label>First Name <span class="req">*</span></label>
+                <input type="text" name="first_name" placeholder="Rajesh" required>
+              </div>
+              <div class="fg">
+                <label>Last Name <span class="req">*</span></label>
+                <input type="text" name="last_name" placeholder="Kumar" required>
+              </div>
+            </div>
+
+            <div class="fg">
+              <label>Email Address <span class="req">*</span></label>
+              <div class="input-wrap">
+                <span class="input-icon">✉</span>
+                <input type="email" name="email" placeholder="you@company.com" required>
+              </div>
+            </div>
+
+            <div class="fg">
+              <label>Phone / WhatsApp <span class="req">*</span></label>
+              <div class="input-addon">
+                <span>+91</span>
+                <input type="tel" name="phone" placeholder="98765 43210" maxlength="10" required>
+              </div>
+            </div>
+
+            <div class="form-divider"><span>Organisation</span></div>
+
+            <div class="fg">
+              <label>Organisation / Company Name <span class="req">*</span></label>
+              <input type="text" name="org_name" placeholder="e.g. TechEvents India Pvt. Ltd." required>
+            </div>
+
+            <div class="frow">
+              <div class="fg">
+                <label>City <span class="req">*</span></label>
+                <input type="text" name="city" placeholder="Mumbai" required>
+              </div>
+              <div class="fg">
+                <label>State <span class="req">*</span></label>
+                <select name="state" required>
+                  <option value="">Select state</option>
+                  <option>Maharashtra</option><option>Delhi</option><option>Karnataka</option>
+                  <option>Tamil Nadu</option><option>Telangana</option><option>Gujarat</option>
+                  <option>Rajasthan</option><option>West Bengal</option><option>Uttar Pradesh</option>
+                  <option>Punjab</option><option>Madhya Pradesh</option><option>Kerala</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="fg">
+              <label>Years of Experience Organising Events</label>
+              <select name="experience">
+                <option value="">Select</option>
+                <option value="0">First time</option>
+                <option value="1">1–2 years</option>
+                <option value="3">3–5 years</option>
+                <option value="6">6–10 years</option>
+                <option value="10">10+ years</option>
+              </select>
+            </div>
+
+            <div class="fg">
+              <label>Website / Social Media (optional)</label>
+              <input type="url" name="website" placeholder="https://yourwebsite.com">
+            </div>
+
+            <div class="step-nav">
+              <span></span>
+              <button type="button" class="btn-next">Next: Expo Info →</button>
+            </div>
+          </div>
+
+          <!-- ── STEP 2: Expo Info ── -->
+          <div class="step-panel" data-step="1">
+            <div class="form-divider"><span>Expo Details</span></div>
+
+            <div class="fg">
+              <label>Expo Name <span class="req">*</span></label>
+              <input type="text" name="expo_name" placeholder="e.g. Bengaluru Tech Expo 2025" required>
+            </div>
+
+            <div class="frow">
+              <div class="fg">
+                <label>Category <span class="req">*</span></label>
+                <select name="category" required>
+                  <option value="">Select category</option>
+                  <option>Technology</option><option>Fashion &amp; Lifestyle</option>
+                  <option>Food &amp; Beverages</option><option>Health &amp; Wellness</option>
+                  <option>Real Estate</option><option>Agriculture</option>
+                  <option>Education</option><option>Automobiles</option>
+                  <option>Handicrafts</option><option>Industrial</option><option>Other</option>
+                </select>
+              </div>
+              <div class="fg">
+                <label>Expected Footfall</label>
+                <select name="expected_footfall">
+                  <option value="">Estimate</option>
+                  <option value="500">Up to 500</option>
+                  <option value="1000">500 – 1,000</option>
+                  <option value="5000">1,000 – 5,000</option>
+                  <option value="10000">5,000 – 10,000</option>
+                  <option value="50000">10,000+</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="frow">
+              <div class="fg">
+                <label>Start Date <span class="req">*</span></label>
+                <input type="date" name="start_date" required>
+              </div>
+              <div class="fg">
+                <label>End Date <span class="req">*</span></label>
+                <input type="date" name="end_date" required>
+              </div>
+            </div>
+
+            <div class="fg">
+              <label>Venue / Hall Name <span class="req">*</span></label>
+              <input type="text" name="venue" placeholder="e.g. NSCI Dome, Worli, Mumbai" required>
+            </div>
+
+            <div class="frow">
+              <div class="fg">
+                <label>Expo City <span class="req">*</span></label>
+                <input type="text" name="expo_city" placeholder="City" required>
+              </div>
+              <div class="fg">
+                <label>Expo State <span class="req">*</span></label>
+                <select name="expo_state" required>
+                  <option value="">Select</option>
+                  <option>Maharashtra</option><option>Delhi</option><option>Karnataka</option>
+                  <option>Tamil Nadu</option><option>Telangana</option><option>Gujarat</option>
+                  <option>Rajasthan</option><option>West Bengal</option><option>Uttar Pradesh</option>
+                  <option>Punjab</option><option>Madhya Pradesh</option><option>Kerala</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="fg">
+              <label>Expo Description <span class="req">*</span></label>
+              <textarea name="description" placeholder="Describe your expo — theme, what visitors can expect, industries covered…" required></textarea>
+            </div>
+
+            <div class="step-nav">
+              <button type="button" class="btn-back">← Back</button>
+              <button type="button" class="btn-next">Next: Stalls &amp; Tickets →</button>
+            </div>
+          </div>
+
+          <!-- ── STEP 3: Stalls & Tickets ── -->
+          <div class="step-panel" data-step="2">
+            <div class="form-divider"><span>Stall Configuration</span></div>
+
+            <div class="frow">
+              <div class="fg">
+                <label>Total Stall Slots Available <span class="req">*</span></label>
+                <input type="number" name="total_stalls" placeholder="e.g. 50" min="1" required>
+              </div>
+              <div class="fg">
+                <label>Stall Size Options</label>
+                <select name="stall_sizes">
+                  <option value="3x3">3m × 3m only</option>
+                  <option value="6x4">6m × 4m only</option>
+                  <option value="both">Both sizes available</option>
+                  <option value="custom">Custom sizes</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="frow">
+              <div class="fg">
+                <label>Basic Stall Price (₹)</label>
+                <div class="input-addon">
+                  <span>₹</span>
+                  <input type="number" name="basic_stall_price" placeholder="4999" min="0">
+                </div>
+              </div>
+              <div class="fg">
+                <label>Premium Stall Price (₹)</label>
+                <div class="input-addon">
+                  <span>₹</span>
+                  <input type="number" name="premium_stall_price" placeholder="12999" min="0">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-divider"><span>Attendee Tickets</span></div>
+
+            <div class="fg">
+              <label>Attendee Ticket Type <span class="req">*</span></label>
+              <select name="ticket_type" id="ticket_type" onchange="toggleTicketPrice()" required>
+                <option value="free">Free Entry</option>
+                <option value="paid">Paid Tickets</option>
+                <option value="both">Free + Paid tiers</option>
+              </select>
+            </div>
+
+            <div class="fg" id="ticket_price_wrap" style="display:none;">
+              <label>Ticket Price (₹) <span class="req">*</span></label>
+              <div class="input-addon">
+                <span>₹</span>
+                <input type="number" name="ticket_price" id="ticket_price" placeholder="199" min="1">
+              </div>
+            </div>
+
+            <div class="fg">
+              <label>Maximum Attendees (optional)</label>
+              <input type="number" name="max_attendees" placeholder="Leave blank for unlimited">
+            </div>
+
+            <div class="form-divider"><span>Additional Info</span></div>
+
+            <div class="fg">
+              <label>Special Requirements / Notes</label>
+              <textarea name="notes" placeholder="Any special requirements, parking info, entry guidelines etc."></textarea>
+            </div>
+
+            <div class="fcheck">
+              <input type="checkbox" id="agree" name="agree" required>
+              <label for="agree">I agree to ExpoConnect's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>. I confirm all details are accurate.</label>
+            </div>
+
+            <div class="step-nav">
+              <button type="button" class="btn-back">← Back</button>
+              <button type="submit" class="form-submit" id="submit-btn" data-label="Submit Expo Listing">
+                <span class="spinner"></span>
+                <span class="btn-text">Submit Expo Listing →</span>
+              </button>
+            </div>
+          </div>
+
+        </form>
+      </div><!-- /form-card -->
+
+      <!-- Already have account -->
+      <p style="text-align:center;margin-top:20px;font-size:.83rem;color:var(--muted);">
+        Already listed an expo? <a href="admin-login.html" style="color:var(--accent);">Access your dashboard →</a>
+      </p>
+
+    </div><!-- /form-wrap -->
+  </div><!-- /form-page -->
+
+</div><!-- /shell -->
+<div id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/bg3d.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/app.js"></script>
+<script>
+  initBG({ particleCount: 400, icoCount: 5, intensity: 0.55 });
+  initStepWizard();
+
+  function toggleTicketPrice() {
+    const type = document.getElementById('ticket_type').value;
+    const wrap = document.getElementById('ticket_price_wrap');
+    const inp  = document.getElementById('ticket_price');
+    wrap.style.display = type !== 'free' ? 'block' : 'none';
+    inp.required       = type !== 'free';
+  }
+
+  document.getElementById('organizer-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (!validateStep(2)) return;
+
+    const btn = document.getElementById('submit-btn');
+    setSubmitLoading(btn, true);
+
+    try {
+      const fd  = new FormData(this);
+      const data = Object.fromEntries(fd.entries());
+      data.ticket_price = data.ticket_type === 'free' ? 0 : parseInt(data.ticket_price)||0;
+
+      const { data: res, error } = await Organizers.register(data);
+      if (error) throw new Error(error.message);
+
+      showFormSuccess(
+        document.getElementById('organizer-form'),
+        document.getElementById('form-success'),
+        res?.id ? 'ORG-' + String(res.id).padStart(4,'0') : genRefId('ORG')
+      );
+    } catch(err) {
+      // Supabase not configured — show success UI anyway (demo mode)
+      showFormSuccess(
+        document.getElementById('organizer-form'),
+        document.getElementById('form-success'),
+        genRefId('ORG')
+      );
+      showToast('Demo mode: Supabase not configured yet', '');
+    } finally {
+      setSubmitLoading(btn, false);
+    }
+  });
+</script>
+</body>
+</html>

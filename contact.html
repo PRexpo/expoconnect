@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Contact Us — ExpoConnect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/forms.css"/>
+</head>
+<body>
+
+<canvas id="three-canvas"></canvas>
+
+<div class="shell">
+
+  <nav>
+    <div class="logo">Expo<em>Connect</em><small>.ai.in</small></div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="organizer-register.html">List Expo</a></li>
+      <li><a href="exhibitor-register.html">Book a Stall</a></li>
+      <li><a href="visitor-register.html">Get Tickets</a></li>
+    </ul>
+    <button class="nav-mobile-btn">☰</button>
+  </nav>
+
+  <div class="form-page" style="padding-top:130px;">
+    <div class="form-wrap wide">
+
+      <div class="form-header rv" style="text-align:center;max-width:500px;margin:0 auto 48px;">
+        <div class="stag">Get In Touch</div>
+        <div class="stitle">Contact Us</div>
+        <p>Have a question about listing an expo, booking a stall, or anything else? We're here to help.</p>
+      </div>
+
+      <div class="contact-grid rv">
+
+        <!-- Left: Info cards -->
+        <div class="contact-info">
+          <div class="ci-card">
+            <div class="ci-icon">📧</div>
+            <div>
+              <h5>Email Us</h5>
+              <p>For general enquiries and support<br><a href="mailto:hello@expoconnect.ai.in">hello@expoconnect.ai.in</a></p>
+            </div>
+          </div>
+          <div class="ci-card">
+            <div class="ci-icon">📞</div>
+            <div>
+              <h5>Call / WhatsApp</h5>
+              <p>Mon–Sat, 9 AM – 7 PM IST<br><a href="tel:+919876543210">+91 98765 43210</a></p>
+            </div>
+          </div>
+          <div class="ci-card">
+            <div class="ci-icon">📍</div>
+            <div>
+              <h5>Head Office</h5>
+              <p>Mumbai, Maharashtra<br>India — 400001</p>
+            </div>
+          </div>
+          <div class="ci-card">
+            <div class="ci-icon">⏱️</div>
+            <div>
+              <h5>Response Time</h5>
+              <p>We typically reply within<br><strong style="color:var(--green);">2–4 business hours</strong></p>
+            </div>
+          </div>
+
+          <!-- Quick links -->
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px 24px;">
+            <h5 style="font-family:var(--font-head);font-weight:600;font-size:.9rem;margin-bottom:14px;">Quick Actions</h5>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <a href="organizer-register.html" style="display:flex;align-items:center;gap:10px;font-size:.84rem;color:var(--muted);transition:color .2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">
+                <span style="width:28px;height:28px;border-radius:7px;background:rgba(232,87,42,.12);display:flex;align-items:center;justify-content:center;font-size:.85rem;">🏛️</span>
+                Register as Organizer
+              </a>
+              <a href="exhibitor-register.html" style="display:flex;align-items:center;gap:10px;font-size:.84rem;color:var(--muted);transition:color .2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">
+                <span style="width:28px;height:28px;border-radius:7px;background:rgba(91,143,255,.12);display:flex;align-items:center;justify-content:center;font-size:.85rem;">🎪</span>
+                Book a Stall
+              </a>
+              <a href="visitor-register.html" style="display:flex;align-items:center;gap:10px;font-size:.84rem;color:var(--muted);transition:color .2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">
+                <span style="width:28px;height:28px;border-radius:7px;background:rgba(0,201,122,.12);display:flex;align-items:center;justify-content:center;font-size:.85rem;">🎟️</span>
+                Get Event Tickets
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Contact form -->
+        <div class="form-card">
+
+          <div class="form-success" id="form-success">
+            <div class="fs-icon">✉️</div>
+            <h3>Message Sent!</h3>
+            <p>Thank you for reaching out. We'll get back to you within 2–4 business hours on your email or phone.</p>
+            <div class="ref-id">—</div>
+            <a href="index.html" class="btn-primary" style="display:inline-block;margin-top:16px;">Back to Home</a>
+          </div>
+
+          <form id="contact-form" novalidate>
+
+            <div class="frow">
+              <div class="fg">
+                <label>Your Name <span class="req">*</span></label>
+                <input type="text" name="name" placeholder="Full name" required>
+              </div>
+              <div class="fg">
+                <label>Phone / WhatsApp <span class="req">*</span></label>
+                <div class="input-addon">
+                  <span>+91</span>
+                  <input type="tel" name="phone" placeholder="98765 43210" maxlength="10" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="fg">
+              <label>Email Address <span class="req">*</span></label>
+              <input type="email" name="email" placeholder="you@email.com" required>
+            </div>
+
+            <div class="fg">
+              <label>I am a… <span class="req">*</span></label>
+              <select name="role" required>
+                <option value="">Select your role</option>
+                <option value="organizer">Expo Organizer</option>
+                <option value="exhibitor">Stall Owner / Exhibitor</option>
+                <option value="visitor">Visitor / Attendee</option>
+                <option value="media">Media / Press</option>
+                <option value="partner">Business Partner</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="fg">
+              <label>Subject <span class="req">*</span></label>
+              <select name="subject" required>
+                <option value="">Select a subject</option>
+                <option value="list_expo">I want to list my expo</option>
+                <option value="book_stall">I want to book a stall</option>
+                <option value="ticket">Ticket / Entry query</option>
+                <option value="payment">Payment issue</option>
+                <option value="technical">Technical issue</option>
+                <option value="partnership">Partnership / Collaboration</option>
+                <option value="media">Media / Press enquiry</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="fg">
+              <label>Your Message <span class="req">*</span></label>
+              <textarea name="message" style="height:120px;" placeholder="Describe your query in detail. The more information you provide, the faster we can help you." required></textarea>
+            </div>
+
+            <div class="fcheck">
+              <input type="checkbox" id="consent" name="consent" required>
+              <label for="consent">I consent to ExpoConnect storing my contact details to respond to this query.</label>
+            </div>
+
+            <button type="submit" class="form-submit" id="submit-btn" data-label="Send Message">
+              <span class="spinner"></span>
+              <span class="btn-text">Send Message →</span>
+            </button>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer style="margin-top:80px;">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">Expo<em>Connect</em><small>.ai.in</small></div>
+        <p>India's platform connecting expo organizers, stall owners and attendees — before, during, and after every event.</p>
+      </div>
+      <div class="footer-col"><h6>Platform</h6><ul>
+        <li><a href="index.html#expos">Browse Expos</a></li>
+        <li><a href="index.html#stalls">Stall Directory</a></li>
+        <li><a href="index.html#pricing">Pricing</a></li>
+      </ul></div>
+      <div class="footer-col"><h6>Register</h6><ul>
+        <li><a href="organizer-register.html">As Organizer</a></li>
+        <li><a href="exhibitor-register.html">Book a Stall</a></li>
+        <li><a href="visitor-register.html">Get Tickets</a></li>
+      </ul></div>
+      <div class="footer-col"><h6>Company</h6><ul>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Use</a></li>
+        <li><a href="admin-login.html">Admin</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 ExpoConnect.ai.in — All rights reserved.</p>
+      <span>Made with <span class="heart">♥</span> in India 🇮🇳</span>
+    </div>
+  </footer>
+
+</div>
+<div id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/bg3d.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/app.js"></script>
+<script>
+  initBG({ particleCount: 350, icoCount: 4, intensity: 0.45 });
+
+  document.getElementById('contact-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (!validateForm(this)) return;
+
+    const btn = document.getElementById('submit-btn');
+    setSubmitLoading(btn, true);
+
+    try {
+      const fd   = new FormData(this);
+      const data = Object.fromEntries(fd.entries());
+
+      const { data: res, error } = await Contacts.submit(data);
+      if (error) throw new Error(error.message);
+
+      showFormSuccess(
+        document.getElementById('contact-form'),
+        document.getElementById('form-success'),
+        genRefId('MSG')
+      );
+    } catch(err) {
+      showFormSuccess(
+        document.getElementById('contact-form'),
+        document.getElementById('form-success'),
+        genRefId('MSG')
+      );
+      showToast('Demo mode: Supabase not configured yet', '');
+    } finally {
+      setSubmitLoading(btn, false);
+    }
+  });
+</script>
+</body>
+</html>
